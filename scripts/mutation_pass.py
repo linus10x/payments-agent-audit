@@ -70,13 +70,23 @@ MUTANTS: list[Mutant] = [
     Mutant("sovereign_veto.py", "if not principal:", "if principal:",
            "veto: accept failed authentication"),
     # --- autonomy_ladder (AL-PROBE-06 irreversibility + P1) ---
-    Mutant("autonomy_ladder.py", "if is_irreversible(request.rail_id) and request.only_post_hoc:",
-           "if is_irreversible(request.rail_id) or request.only_post_hoc:",
+    Mutant("autonomy_ladder.py",
+           "if is_irreversible(request.rail_id) and not self._has_effective_pre_auth(request):",
+           "if is_irreversible(request.rail_id) or not self._has_effective_pre_auth(request):",
            "irreversibility gate: and -> or"),
     Mutant("autonomy_ladder.py", "return len(self.pre_auth_controls) == 0",
            "return len(self.pre_auth_controls) != 0", "only_post_hoc inverted"),
     Mutant("autonomy_ladder.py", "elif not att.is_independent:",
            "elif att.is_independent:", "P1 independence check inverted"),
+    # D1 regression — the pre-auth-effective attestation requirement
+    Mutant("autonomy_ladder.py",
+           "return att is not None and att.satisfied and att.is_independent",
+           "return att is not None and att.satisfied",
+           "D1: drop pre-auth independence requirement"),
+    Mutant("autonomy_ladder.py",
+           "if request.only_post_hoc:\n            return False",
+           "if request.only_post_hoc:\n            return True",
+           "D1: only_post_hoc no longer blocks pre-auth unblock"),
     # --- effective_challenge (P5 self-challenge + downgrade) ---
     Mutant("effective_challenge_harness.py", "if challenger_model is primary_model:",
            "if challenger_model is not primary_model:", "self-challenge guard inverted"),
@@ -85,9 +95,9 @@ MUTANTS: list[Mutant] = [
            'if base_reco == "accept_primary" and self.independence.is_independent:',
            "P5 independence downgrade inverted"),
     # --- defcon (P4 transition-direction guard + HALT stickiness) ---
-    Mutant("defcon.py", "if leaving_halt and target.value != DEFCON.HALT.value - 1:",
-           "if leaving_halt and target.value == DEFCON.HALT.value - 1:",
-           "HALT de-escalation adjacency guard inverted"),
+    Mutant("defcon.py", "if de_escalating and target.value != from_level.value - 1:",
+           "if de_escalating and target.value == from_level.value - 1:",
+           "de-escalation adjacency guard inverted"),
     Mutant("defcon.py", "if self._current_level == DEFCON.HALT:\n            logger.warning",
            "if self._current_level != DEFCON.HALT:\n            logger.warning",
            "evaluate(): HALT auto-deescalation block inverted"),
@@ -102,9 +112,12 @@ MUTANTS: list[Mutant] = [
     Mutant("sar_workflow.py", "in_scope = amount_usd >= TRAVEL_RULE_THRESHOLD_USD",
            "in_scope = amount_usd > TRAVEL_RULE_THRESHOLD_USD",
            "Travel Rule threshold boundary weakened"),
-    # --- reg_e (provisional credit) ---
+    # --- reg_e (provisional credit + D2 new-account window) ---
     Mutant("reg_e.py", "if not provisional_credit_given:",
            "if provisional_credit_given:", "Reg E provisional-credit check inverted"),
+    Mutant("reg_e.py", "initial_days = NEW_ACCOUNT_INITIAL_BUSINESS_DAYS",
+           "initial_days = INITIAL_INVESTIGATION_BUSINESS_DAYS",
+           "D2: new-account initial window reverted to 10 days"),
     # --- rail_finality ---
     Mutant("rail_finality.py", "return self.finality is Finality.IRREVOCABLE",
            "return self.finality is not Finality.IRREVOCABLE",
@@ -112,8 +125,19 @@ MUTANTS: list[Mutant] = [
 ]
 
 
+def _invalidate_bytecode() -> None:
+    """Delete cached bytecode so a same-length mutant (e.g. ``==`` -> ``!=``)
+    written within one mtime tick cannot leave a stale ``.pyc`` in play."""
+    for pyc in ROOT.rglob("*.pyc"):
+        pyc.unlink(missing_ok=True)
+    for cache in ROOT.rglob("__pycache__"):
+        for f in cache.glob("*"):
+            f.unlink(missing_ok=True)
+
+
 def run_tests() -> bool:
     """Return True if the suite PASSES (mutant survived)."""
+    _invalidate_bytecode()
     result = subprocess.run(TEST_CMD, cwd=ROOT, capture_output=True, text=True)
     return result.returncode == 0
 
@@ -121,7 +145,6 @@ def run_tests() -> bool:
 def main() -> int:
     killed, survived = 0, 0
     survivors: list[str] = []
-    # rail_finality lives one level up in path resolution
     for m in MUTANTS:
         path = SRC / m.file
         original = path.read_text()

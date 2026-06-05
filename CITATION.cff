@@ -1,0 +1,55 @@
+cff-version: 1.2.0
+message: >-
+  If you use these patterns in your systems, research, or publications, please
+  cite this repository using the metadata below.
+type: software
+title: >-
+  payments-agent-audit: Governance Patterns for Autonomous AI Agents in
+  Regulated Payments
+authors:
+  - family-names: Bhaduri
+    given-names: Kunjar
+    affiliation: North Texas Capital Investments
+    website: "https://www.linkedin.com/in/kunjarbhaduri"
+# NOT-YET-LIVE: the remote below is created at owner sign-off (see docs/DOI_PLAN.md).
+repository-code: "https://github.com/linus10x/payments-agent-audit"
+url: "https://github.com/linus10x/payments-agent-audit"
+abstract: >-
+  Reference governance patterns and runnable implementations for audit-ready
+  autonomous AI agents in regulated payments. Carries five Autonomy-Ladder
+  governance primitives built to a corrected specification — autonomy-level
+  classification (A0 through A4) with an irreversibility promotion gate,
+  sovereign veto with a fail-closed production mode and authenticated-principal
+  binding, a hash-chain audit ledger with a branched genesis seed and witness
+  anchoring, a DEFCON-style risk-state machine with a transition-direction
+  guard, and an effective-challenge harness that rejects self-challenge and
+  records an independence attestation. Adds payments-specific controls: an
+  implemented OFAC sanctions screening workflow (fuzzy match + hit disposition
+  against a pluggable list, no list bundled), BSA/AML SAR timeliness and the
+  Travel Rule, Regulation E error resolution, sponsor-bank / BaaS oversight, and
+  a first-class rail-finality / irreversibility dimension that gates
+  autonomy-level promotion for instant-rail (FedNow/RTP) programs while modeling
+  ACH as non-final. Maps to U.S. payments authorities including OFAC (31 CFR Part
+  501 / IEEPA), FinCEN BSA/AML (31 CFR 1020.320, 1010.410(f), 1022), the FedNow
+  Service (Regulation J, 12 CFR Part 210 Subpart C), the RTP Operating Rules, the
+  Nacha Operating Rules, Regulation E (12 CFR 1005.11), the June 2023 Interagency
+  Guidance on Third-Party Relationships, and the BSA five-year retention floor (31
+  CFR 1010.430). The claim layer matches implemented reality; documented patterns
+  are labeled as such. Patterns extracted from a private quantitative options
+  program operating in paper-trading Phase 0 — no live capital deployed.
+keywords:
+  - AI governance
+  - autonomous agents
+  - payments
+  - OFAC
+  - sanctions screening
+  - BSA/AML
+  - real-time payments
+  - regulated AI
+  - audit trail
+  - human-in-the-loop
+license: MIT
+version: "0.1.0"
+# date-released: set at Release / Zenodo-webhook time (this build is STAGED, not released).
+# DOI: minted via the GitHub–Zenodo webhook on first Release publish.
+#   See docs/DOI_PLAN.md. Update both fields with the release date + concept DOI post-Release.

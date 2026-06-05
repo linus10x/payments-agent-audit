@@ -35,6 +35,10 @@ from payments_agent_audit.schemas.audit_event import (
 # 12 CFR 1005.11(c)
 INITIAL_INVESTIGATION_BUSINESS_DAYS = 10
 EXTENDED_INVESTIGATION_DAYS = 45
+# 12 CFR 1005.11(c)(3): for new-account, point-of-sale debit, and
+# foreign-initiated transfers the institution has a longer initial window
+# (20 business days) and a longer extended window (90 calendar days).
+NEW_ACCOUNT_INITIAL_BUSINESS_DAYS = 20
 NEW_ACCOUNT_POS_FOREIGN_DAYS = 90
 
 
@@ -80,17 +84,23 @@ class RegEErrorResolution:
         claim_id: str,
         actor_id: str | None = None,
     ) -> RegEResolutionResult:
-        """Evaluate Reg E timeline compliance for a single error claim."""
-        # Approximate business days as calendar days for the 10-day initial
-        # window (deployers should apply their banking-day calendar; this gate
-        # flags the requirement, it does not own the holiday calendar).
-        initial_deadline = notice_date + timedelta(days=INITIAL_INVESTIGATION_BUSINESS_DAYS)
-        completed_in_initial = investigation_completion_date <= initial_deadline
+        """Evaluate Reg E timeline compliance for a single error claim.
 
+        Business days are approximated as calendar days (deployers apply their
+        banking-day calendar; this gate flags the requirement, it does not own
+        the holiday calendar). New-account / POS / foreign transfers get the
+        longer 20-business-day initial window and the 90-day extended window per
+        12 CFR 1005.11(c)(3); all other claims get 10 / 45.
+        """
         if is_new_account_pos_or_foreign:
+            initial_days = NEW_ACCOUNT_INITIAL_BUSINESS_DAYS
             extended_days = NEW_ACCOUNT_POS_FOREIGN_DAYS
         else:
+            initial_days = INITIAL_INVESTIGATION_BUSINESS_DAYS
             extended_days = EXTENDED_INVESTIGATION_DAYS
+
+        initial_deadline = notice_date + timedelta(days=initial_days)
+        completed_in_initial = investigation_completion_date <= initial_deadline
         extended_deadline = notice_date + timedelta(days=extended_days)
 
         failures: list[str] = []
@@ -102,8 +112,8 @@ class RegEErrorResolution:
             provisional_required = True
             if not provisional_credit_given:
                 failures.append(
-                    f"investigation extended beyond {INITIAL_INVESTIGATION_BUSINESS_DAYS} business "
-                    f"days without provisional credit (required under 12 CFR 1005.11(c)(2))"
+                    f"investigation extended beyond {initial_days} business days without "
+                    f"provisional credit (required under 12 CFR 1005.11(c)(2)/(c)(3))"
                 )
             if investigation_completion_date > extended_deadline:
                 failures.append(
@@ -141,6 +151,7 @@ class RegEErrorResolution:
 __all__ = [
     "EXTENDED_INVESTIGATION_DAYS",
     "INITIAL_INVESTIGATION_BUSINESS_DAYS",
+    "NEW_ACCOUNT_INITIAL_BUSINESS_DAYS",
     "NEW_ACCOUNT_POS_FOREIGN_DAYS",
     "ErrorType",
     "RegEError",

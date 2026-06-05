@@ -173,10 +173,11 @@ class DEFCONMachine:
     ) -> DEFCON:
         """Human-in-the-loop override. Required for any de-escalation from HALT.
 
-        Transition-direction guard: a de-escalation OUT OF HALT may only step
-        to the adjacent level (HALT → DANGER); a single-call ``HALT → NORMAL``
-        (or any multi-step de-escalation out of HALT) is rejected, forcing the
-        operator through the intermediate review states.
+        Transition-direction guard: ANY manual de-escalation may only step to the
+        adjacent lower level (e.g. HALT → DANGER, DANGER → ALERT). A multi-level
+        de-escalation in one call (e.g. HALT → NORMAL, DANGER → NORMAL) is
+        rejected, forcing the operator down through each intermediate review
+        state. Escalation (raising the level) is unrestricted.
 
         When an Authorizer is wired, ``credential`` is authenticated to a
         principal which must pass ``authorize``; the resolved principal is the
@@ -184,13 +185,15 @@ class DEFCONMachine:
         """
         from_level = self._current_level
 
-        # Transition-direction guard (the corrected P4 invariant).
-        leaving_halt = from_level == DEFCON.HALT and target.value < DEFCON.HALT.value
-        if leaving_halt and target.value != DEFCON.HALT.value - 1:
+        # Transition-direction guard (the corrected P4 invariant): a de-escalation
+        # must step exactly one level down; escalation is unrestricted.
+        de_escalating = target.value < from_level.value
+        if de_escalating and target.value != from_level.value - 1:
             raise DEFCONOverrideRejectedError(
-                f"de-escalation out of HALT must step to the adjacent level "
-                f"({DEFCON.DANGER.name}); a direct HALT -> {target.name} jump "
-                "is forbidden. Step down through the intermediate review states."
+                f"manual de-escalation must step to the adjacent lower level "
+                f"(from {from_level.name}, that is {DEFCON(from_level.value - 1).name}); "
+                f"a direct {from_level.name} -> {target.name} jump is forbidden. "
+                "Step down through the intermediate review states."
             )
 
         resolved_operator = operator_id

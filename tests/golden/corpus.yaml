@@ -23,8 +23,10 @@ ofac_penalties:
     governing_rule: "31 CFR Part 501 / IEEPA strict liability"
     summary: "Deficient geolocation/IP screening let stored-value/e-reward products reach IP/email addresses tied to sanctioned jurisdictions."
     control: ofac_screen
-    screen_name: "Tango Card sanctioned-jurisdiction party"
-    sdn_name: "Tango Card sanctioned-jurisdiction party"
+    # screen_name is a REORDERED variant of the list entry so the fixture
+    # exercises real fuzzy matching (token-sort), not an exact string equality.
+    screen_name: "Sanctioned Jurisdiction Party Tango Card"
+    sdn_name: "Tango Card Sanctioned Jurisdiction Party"
     url: "https://ofac.treasury.gov/recent-actions/20220930_33"
   - id: moneygram_2021
     matter: "MoneyGram Payment Systems, Inc. — OFAC settlement"
@@ -34,7 +36,7 @@ ofac_penalties:
     governing_rule: "31 CFR Part 501 / IEEPA strict liability"
     summary: "Apparent violations involving services to blocked persons and a Syria nexus."
     control: ofac_screen
-    screen_name: "Blocked Person Syria Nexus"
+    screen_name: "Syria Nexus Blocked Person"  # reordered tokens
     sdn_name: "Blocked Person Syria Nexus"
     url: "https://ofac.treasury.gov/recent-actions/20210429"
   - id: coinlist_2023
@@ -45,7 +47,7 @@ ofac_penalties:
     governing_rule: "31 CFR Part 501 / IEEPA strict liability"
     summary: "Sanctions-screening failures; agreed to invest in enhanced compliance controls."
     control: ofac_screen
-    screen_name: "Sanctioned Crimea Region User"
+    screen_name: "Sanctioned Crimea Regon User"  # single-letter typo (Regon)
     sdn_name: "Sanctioned Crimea Region User"
     url: "https://ofac.treasury.gov/media/932406/download"
 

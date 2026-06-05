@@ -59,7 +59,7 @@ def test_hysteresis_deescalation_requires_confirmations() -> None:
 def test_direct_halt_to_normal_jump_forbidden() -> None:
     m = DEFCONMachine()
     m.evaluate(PaymentRiskMetrics(0.06, 0.0, 0))
-    with pytest.raises(DEFCONOverrideRejectedError, match="adjacent level"):
+    with pytest.raises(DEFCONOverrideRejectedError, match="adjacent lower level"):
         m.manual_override(DEFCON.NORMAL, "op", "recovered")
 
 
@@ -68,6 +68,26 @@ def test_halt_to_danger_adjacent_step_allowed() -> None:
     m.evaluate(PaymentRiskMetrics(0.06, 0.0, 0))
     m.manual_override(DEFCON.DANGER, "op", "stepping down")
     assert m.level is DEFCON.DANGER
+
+
+def test_multi_level_deescalation_below_halt_also_blocked() -> None:
+    """D4: the adjacency guard applies to ALL manual de-escalations, not only
+    those leaving HALT. DANGER -> NORMAL in one call is rejected."""
+    m = DEFCONMachine()
+    m.evaluate(PaymentRiskMetrics(0.035, 0.0, 0))  # -> DANGER
+    assert m.level is DEFCON.DANGER
+    with pytest.raises(DEFCONOverrideRejectedError, match="adjacent lower level"):
+        m.manual_override(DEFCON.NORMAL, "op", "all clear")
+    # adjacent step down is allowed
+    m.manual_override(DEFCON.ALERT, "op", "stepping down")
+    assert m.level is DEFCON.ALERT
+
+
+def test_manual_escalation_unrestricted() -> None:
+    """Escalation (raising the level) is not subject to the adjacency guard."""
+    m = DEFCONMachine()
+    m.manual_override(DEFCON.HALT, "op", "kill it now")  # NORMAL -> HALT in one call
+    assert m.level is DEFCON.HALT
 
 
 def test_production_mode_requires_authorizer() -> None:

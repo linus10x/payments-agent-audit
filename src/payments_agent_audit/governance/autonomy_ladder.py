@@ -131,6 +131,13 @@ PRE_AUTH_CONTROLS = frozenset(
 )
 POST_HOC_ONLY_CONTROLS = frozenset({"post_hoc_veto", "post_settlement_review", "next_day_recon"})
 
+# The attestation criterion that an instant-rail program's pre-authorization
+# control is actually WIRED AND EFFECTIVE — not merely named. On an irreversible
+# rail this is the one control standing between post-hoc veto and autonomous
+# irreversible payouts, so in production it must be independently attested, not
+# asserted by listing a control string.
+PRE_AUTH_EFFECTIVE_CRITERION = "pre_auth_control_effective"
+
 
 @dataclass(frozen=True)
 class PromotionRequest:
@@ -228,13 +235,26 @@ class AutonomyLadderGate:
         # AL-PROBE-06 — the irreversibility gate.
         if request.moves_money and request.target_tier.is_autonomous_writer:
             rail = get_rail(request.rail_id)  # fail closed on unknown rail
-            if is_irreversible(request.rail_id) and request.only_post_hoc:
+            if is_irreversible(request.rail_id) and not self._has_effective_pre_auth(request):
                 irreversibility_refusal = True
+                if request.only_post_hoc:
+                    reason = (
+                        f"its only controls act after authorization ({sorted(request.controls)})"
+                    )
+                else:
+                    # A pre-auth control is NAMED but, in production, not
+                    # independently attested as wired/effective — closing the
+                    # "bare-string" bypass.
+                    named = sorted(request.pre_auth_controls)
+                    reason = (
+                        f"a pre-authorization control is named ({named}) but is not "
+                        f"independently attested as wired/effective "
+                        f"(criterion {PRE_AUTH_EFFECTIVE_CRITERION!r})"
+                    )
                 failures.append(
                     f"IRREVERSIBILITY REFUSAL: program {request.program_id!r} moves money on "
-                    f"{rail.display_name} (final-by-rule), and its only controls act after "
-                    f"authorization ({sorted(request.controls)}). An irreversible-write program "
-                    f"must carry a pre-authorization control "
+                    f"{rail.display_name} (final-by-rule), and {reason}. An irreversible-write "
+                    f"program must carry an attested pre-authorization control "
                     f"(one of {sorted(PRE_AUTH_CONTROLS)}) before A3/A4."
                 )
 
@@ -249,6 +269,26 @@ class AutonomyLadderGate:
             failures=tuple(failures),
             irreversibility_refusal=irreversibility_refusal,
         )
+
+    def _has_effective_pre_auth(self, request: PromotionRequest) -> bool:
+        """Whether the program has a pre-authorization control that may unblock
+        an irreversible-rail promotion.
+
+        Advisory mode: any named pre-auth control counts (labeled advisory).
+        Production mode: a named pre-auth control is NOT enough — it must be
+        backed by a satisfied, INDEPENDENT attestation that the control is wired
+        and effective. This closes the bare-string bypass: listing
+        ``"pre_auth_ofac_screening"`` without attestation does not unblock A3/A4.
+        """
+        if request.only_post_hoc:
+            return False
+        if self.mode == "advisory":
+            return True
+        att = next(
+            (a for a in request.attestations if a.criterion == PRE_AUTH_EFFECTIVE_CRITERION),
+            None,
+        )
+        return att is not None and att.satisfied and att.is_independent
 
     def _attestation_failures(self, request: PromotionRequest) -> list[str]:
         failures: list[str] = []
@@ -324,6 +364,7 @@ class AutonomyLadderGate:
 __all__ = [
     "POST_HOC_ONLY_CONTROLS",
     "PRE_AUTH_CONTROLS",
+    "PRE_AUTH_EFFECTIVE_CRITERION",
     "Attestation",
     "AutonomyLadderGate",
     "AutonomyTier",

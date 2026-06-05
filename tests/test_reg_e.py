@@ -63,6 +63,36 @@ def test_completed_past_extended_deadline_noncompliant() -> None:
     assert any("extended deadline" in f for f in r.failures)
 
 
+def test_new_account_20_day_initial_window() -> None:
+    """D2: a new-account claim completed at day 15 — past the standard 10-day
+    window but within the new-account 20-business-day window — is compliant
+    WITHOUT provisional credit (12 CFR 1005.11(c)(3))."""
+    r = RegEErrorResolution().resolve(
+        error_type=ErrorType.UNAUTHORIZED_TRANSFER,
+        notice_date=NOTICE,
+        investigation_completion_date=NOTICE + timedelta(days=15),
+        provisional_credit_given=False,
+        is_new_account_pos_or_foreign=True,
+        claim_id="cl-na-1",
+    )
+    assert r.compliant is True
+    assert r.provisional_credit_required is False
+
+
+def test_standard_account_15_days_requires_provisional() -> None:
+    """Contrast: a standard (non-new) account at day 15 IS past the 10-day
+    window and requires provisional credit."""
+    r = RegEErrorResolution().resolve(
+        error_type=ErrorType.UNAUTHORIZED_TRANSFER,
+        notice_date=NOTICE,
+        investigation_completion_date=NOTICE + timedelta(days=15),
+        provisional_credit_given=False,
+        is_new_account_pos_or_foreign=False,
+        claim_id="cl-std-1",
+    )
+    assert r.compliant is False
+
+
 def test_new_account_90_day_window() -> None:
     r = RegEErrorResolution().resolve(
         error_type=ErrorType.UNAUTHORIZED_TRANSFER,

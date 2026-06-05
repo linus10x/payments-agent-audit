@@ -187,7 +187,7 @@ def test_al_probe_04_illegal_defcon_transition_fails_safe() -> None:
     assert machine.level is DEFCON.HALT
 
     # one-call HALT -> NORMAL via override is rejected (transition-direction guard)
-    with pytest.raises(DEFCONOverrideRejectedError, match="adjacent level"):
+    with pytest.raises(DEFCONOverrideRejectedError, match="adjacent lower level"):
         machine.manual_override(DEFCON.NORMAL, "operator", "we are fine now")
     assert machine.level is DEFCON.HALT
 
@@ -274,9 +274,10 @@ def test_al_probe_06_instant_rail_post_hoc_only_refused_and_recorded() -> None:
     assert refusals[0].payload["rail_id"] == "fednow"
 
 
-def test_al_probe_06_pre_auth_control_unblocks_promotion() -> None:
-    """The same program WITH a genuine pre-authorization control is promotable —
-    the gate blocks post-hoc-only, not autonomy itself."""
+def test_al_probe_06_attested_pre_auth_control_unblocks_promotion() -> None:
+    """The same program WITH a pre-authorization control that is independently
+    ATTESTED as wired/effective is promotable — the gate blocks post-hoc-only and
+    bare-string pre-auth claims, not genuine pre-authorization."""
     chain = AuditChain(deployer_id="acme-pay-prod", chain_creation_iso=CREATED)
     gate = AutonomyLadderGate(audit_chain=chain, mode="production")
     attestations = tuple(
@@ -286,6 +287,7 @@ def test_al_probe_06_pre_auth_control_unblocks_promotion() -> None:
             "audit_ledger_min_window",
             "shadow_mode_min_window",
             "circuit_breaker_recent",
+            "pre_auth_control_effective",  # the pre-auth control is attested wired
         )
     )
     req = PromotionRequest(
@@ -300,6 +302,35 @@ def test_al_probe_06_pre_auth_control_unblocks_promotion() -> None:
     decision = gate.evaluate(req)
     assert decision.granted is True
     assert decision.irreversibility_refusal is False
+
+
+def test_al_probe_06_named_but_unattested_pre_auth_refused() -> None:
+    """D1 regression in the probe pack: naming a pre-auth control WITHOUT an
+    independent attestation that it is wired does NOT unblock — the bare-string
+    bypass is closed."""
+    chain = AuditChain(deployer_id="acme-pay-prod", chain_creation_iso=CREATED)
+    gate = AutonomyLadderGate(audit_chain=chain, mode="production")
+    four = tuple(
+        Attestation(c, True, "mrm-lead", "second_line_mrm", CREATED, f"e://{c}")
+        for c in (
+            "sovereign_veto_load_tested",
+            "audit_ledger_min_window",
+            "shadow_mode_min_window",
+            "circuit_breaker_recent",
+        )
+    )
+    req = PromotionRequest(
+        target_tier=AutonomyTier.A3_SUPERVISED_AUTONOMOUS,
+        decision_class="instant_payout",
+        program_id="fednow-payout-bot",
+        moves_money=True,
+        rail_id="fednow",
+        controls=frozenset({"pre_auth_ofac_screening"}),  # named but unattested
+        attestations=four,
+    )
+    decision = gate.evaluate(req)
+    assert decision.granted is False
+    assert decision.irreversibility_refusal is True
 
 
 def test_al_probe_06_ach_modeled_non_final_separately() -> None:

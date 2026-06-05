@@ -43,6 +43,7 @@ _FULL_ATT = tuple(
         "audit_ledger_min_window",
         "shadow_mode_min_window",
         "circuit_breaker_recent",
+        "pre_auth_control_effective",  # so a named pre-auth control unblocks in production
     )
 )
 

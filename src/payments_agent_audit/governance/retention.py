@@ -17,12 +17,19 @@ from __future__ import annotations
 
 from datetime import timedelta
 
+# Five calendar years, accounting for leap days: any 5-consecutive-year span
+# contains at least one leap day, so 5*365 alone is up to ~2 days short of a true
+# five calendar years. Use 5*365 + 2 so the floor is never UNDER five calendar
+# years (over-retention is safe; under-retention is a BSA violation).
+_FIVE_YEARS = timedelta(days=5 * 365 + 2)
+_TWO_YEARS = timedelta(days=2 * 365 + 1)
+
 # 31 CFR 1010.430(d) — BSA general record retention.
-BSA_RECORD_RETENTION = timedelta(days=5 * 365)
+BSA_RECORD_RETENTION = _FIVE_YEARS
 # 31 CFR 1020.320(d) — SAR + supporting documentation retention.
-SAR_RECORD_RETENTION = timedelta(days=5 * 365)
+SAR_RECORD_RETENTION = _FIVE_YEARS
 # 12 CFR 1005.13(b) — Reg E compliance evidence.
-REG_E_RETENTION = timedelta(days=2 * 365)
+REG_E_RETENTION = _TWO_YEARS
 
 # The governing floor for the payments audit chain.
 AUDIT_CHAIN_RETENTION_FLOOR = BSA_RECORD_RETENTION

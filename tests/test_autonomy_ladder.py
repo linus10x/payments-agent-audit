@@ -19,6 +19,9 @@ REQUIRED = (
     "shadow_mode_min_window",
     "circuit_breaker_recent",
 )
+# The 4 lower-gate criteria plus the pre-auth-effective attestation that unblocks
+# an irreversible-rail promotion in production.
+FULL = (*REQUIRED, "pre_auth_control_effective")
 
 
 def _independent_attestations() -> tuple[Attestation, ...]:
@@ -31,7 +34,7 @@ def _independent_attestations() -> tuple[Attestation, ...]:
             attested_at="2026-06-05T00:00:00+00:00",
             evidence_ref=f"evidence://{c}",
         )
-        for c in REQUIRED
+        for c in FULL
     )
 
 
@@ -68,6 +71,64 @@ def test_irreversible_rail_with_pre_auth_control_passes(chain) -> None:
     d = gate.evaluate(_req(controls=frozenset({"pre_auth_ofac_screening"})))
     assert d.granted is True
     assert d.irreversibility_refusal is False
+
+
+def test_named_pre_auth_without_attestation_refused_in_production(chain) -> None:
+    """D1 regression: a NAMED pre-auth control with no independent attestation
+    that it is wired/effective does NOT unblock an irreversible-rail promotion in
+    production — closing the bare-string bypass."""
+    gate = AutonomyLadderGate(audit_chain=chain, mode="production")
+    # Only the 4 lower-gate criteria are attested; the pre-auth-effective
+    # attestation is absent even though the control string is listed.
+    four = tuple(
+        Attestation(c, True, "mrm", "second_line_mrm", "2026-06-05T00:00:00+00:00", f"e://{c}")
+        for c in REQUIRED
+    )
+    d = gate.evaluate(_req(controls=frozenset({"pre_auth_ofac_screening"}), attestations=four))
+    assert d.granted is False
+    assert d.irreversibility_refusal is True
+    assert any("not independently attested" in f for f in d.failures)
+
+
+def test_pre_auth_attestation_must_be_independent(chain) -> None:
+    """A first-line attestation of the pre-auth control is insufficient in production."""
+    gate = AutonomyLadderGate(audit_chain=chain, mode="production")
+    atts = tuple(
+        Attestation(c, True, "mrm", "second_line_mrm", "2026-06-05T00:00:00+00:00", f"e://{c}")
+        for c in REQUIRED
+    ) + (
+        Attestation(
+            "pre_auth_control_effective",
+            True,
+            "build-eng",
+            "first_line",
+            "2026-06-05T00:00:00+00:00",
+            "e://pre_auth",
+        ),
+    )
+    d = gate.evaluate(_req(controls=frozenset({"pre_auth_ofac_screening"}), attestations=atts))
+    assert d.granted is False
+    assert d.irreversibility_refusal is True
+
+
+def test_advisory_named_pre_auth_unblocks() -> None:
+    """In advisory mode (explicitly labeled advisory), a named pre-auth control
+    unblocks via set membership — the legacy behavior, no attestation required."""
+    from datetime import timedelta
+
+    gate = AutonomyLadderGate(mode="advisory")
+    d = gate.evaluate(
+        _req(
+            controls=frozenset({"pre_auth_ofac_screening"}),
+            attestations=(),
+            sovereign_veto_load_tested_days=10,
+            audit_ledger_running=timedelta(days=120),
+            shadow_mode_running=timedelta(days=45),
+            circuit_breaker_test_recent=True,
+        )
+    )
+    assert d.irreversibility_refusal is False
+    assert d.granted is True
 
 
 def test_ach_not_subject_to_irreversibility_rule(chain) -> None:
