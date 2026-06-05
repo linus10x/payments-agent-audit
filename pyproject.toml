@@ -1,0 +1,105 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["payments_agent_audit*"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[project]
+name = "payments-agent-audit"
+version = "0.1.0"
+description = "Governance patterns for autonomous AI agents in regulated payments"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Kunjar Bhaduri", email = "130852583+linus10x@users.noreply.github.com" },
+]
+keywords = [
+    "ai-governance",
+    "autonomous-agents",
+    "payments",
+    "regulated-ai",
+    "ofac",
+    "bsa-aml",
+    "sanctions-screening",
+    "audit-trail",
+    "real-time-payments",
+    "human-in-the-loop",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security",
+    "Typing :: Typed",
+]
+requires-python = ">=3.12"
+dependencies = []  # Zero runtime dependencies — stdlib only.
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "mypy>=1.14",
+    "ruff>=0.8",
+]
+test-property = ["hypothesis>=6.115"]
+mutation = ["mutmut>=2.5"]
+
+[project.urls]
+Homepage = "https://github.com/linus10x/payments-agent-audit"
+Repository = "https://github.com/linus10x/payments-agent-audit"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+"examples/*" = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+files = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning:payments_agent_audit.governance.audit_chain",
+]
+markers = [
+    "slow: long-running property/mutation tests",
+]
+
+[tool.coverage.run]
+source = ["src/payments_agent_audit"]
+omit = ["src/payments_agent_audit/cli.py"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+
+[tool.mutmut]
+paths_to_mutate = [
+    "src/payments_agent_audit/governance/autonomy_ladder.py",
+    "src/payments_agent_audit/governance/audit_chain.py",
+    "src/payments_agent_audit/governance/sovereign_veto.py",
+    "src/payments_agent_audit/governance/effective_challenge_harness.py",
+]
+tests_dir = ["tests/"]

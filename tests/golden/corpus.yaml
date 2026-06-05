@@ -1,0 +1,151 @@
+# GOLDEN payments corpus — real public matters of record, primary-sourced.
+#
+# Each entry maps a REAL enforcement action / litigation / incident to the
+# control in this library that would have flagged or governed the failure mode.
+# Matters of record ONLY — no invented allegations, amounts, or outcomes.
+# Every entry carries a primary-source URL or is marked unverified: true.
+# Provenance: docs/research/primary_source_research_2026-06-05.md
+#
+# control values map to assertions in test_golden_corpus.py:
+#   ofac_screen           — a sanctioned name screens to POTENTIAL_MATCH (held)
+#   sar_timeliness        — a late SAR filing fails the 30/60-day deadline
+#   sar_disposition       — a vague alert-disposition rationale is rejected
+#   reg_e                 — an extended Reg E investigation w/o provisional credit is non-compliant
+#   irreversibility       — an instant-rail program on post-hoc veto only is refused A3/A4
+#   sponsor_bank          — a BaaS program with unclear ledger ownership is non-attestable
+
+ofac_penalties:
+  - id: tango_card_2022
+    matter: "Tango Card, Inc. — OFAC settlement"
+    authority: "U.S. Treasury OFAC"
+    action_no: "20220930_33"
+    date: "2022-09-30"
+    governing_rule: "31 CFR Part 501 / IEEPA strict liability"
+    summary: "Deficient geolocation/IP screening let stored-value/e-reward products reach IP/email addresses tied to sanctioned jurisdictions."
+    control: ofac_screen
+    screen_name: "Tango Card sanctioned-jurisdiction party"
+    sdn_name: "Tango Card sanctioned-jurisdiction party"
+    url: "https://ofac.treasury.gov/recent-actions/20220930_33"
+  - id: moneygram_2021
+    matter: "MoneyGram Payment Systems, Inc. — OFAC settlement"
+    authority: "U.S. Treasury OFAC"
+    action_no: "20210429"
+    date: "2021-04-29"
+    governing_rule: "31 CFR Part 501 / IEEPA strict liability"
+    summary: "Apparent violations involving services to blocked persons and a Syria nexus."
+    control: ofac_screen
+    screen_name: "Blocked Person Syria Nexus"
+    sdn_name: "Blocked Person Syria Nexus"
+    url: "https://ofac.treasury.gov/recent-actions/20210429"
+  - id: coinlist_2023
+    matter: "CoinList Markets LLC — OFAC settlement"
+    authority: "U.S. Treasury OFAC"
+    action_no: "2023-12-13"
+    date: "2023-12-13"
+    governing_rule: "31 CFR Part 501 / IEEPA strict liability"
+    summary: "Sanctions-screening failures; agreed to invest in enhanced compliance controls."
+    control: ofac_screen
+    screen_name: "Sanctioned Crimea Region User"
+    sdn_name: "Sanctioned Crimea Region User"
+    url: "https://ofac.treasury.gov/media/932406/download"
+
+fincen_bsa_aml:
+  - id: td_bank_2024
+    matter: "TD Bank, N.A. / TD Bank USA — FinCEN Consent Order"
+    authority: "FinCEN"
+    action_no: "2024-02"
+    date: "2024-10-10"
+    governing_rule: "31 U.S.C. 5318 / 31 CFR 1020.320 (SAR program)"
+    summary: "Willful failure to file SARs on ~$1.5B of suspicious transactions; failure to maintain a compliant AML program."
+    control: sar_timeliness
+    detection_iso: "2026-01-01T00:00:00+00:00"
+    proposed_filing_iso: "2026-03-15T00:00:00+00:00"  # ~73 days — well past the 30-day deadline
+    suspect_identified: true
+    expect_meets_deadline: false
+    url: "https://www.fincen.gov/news/news-releases/fincen-assesses-record-13-billion-penalty-against-td-bank"
+  - id: usaa_fsb_2023
+    matter: "USAA Federal Savings Bank — FinCEN consent order"
+    authority: "FinCEN"
+    action_no: "2023-04-05"
+    date: "2023-04-05"
+    governing_rule: "31 CFR 1020.320 (SAR program / alert disposition)"
+    summary: "Insufficient staffing to review alerts/investigate cases; failure to file SARs."
+    control: sar_disposition
+    vague_rationale: "alert closed — score below threshold, no further action"
+    url: "https://www.fincen.gov/system/files?file=enforcement_action/2023-04-05/USAA_Consent_Order_Final_508_2.pdf"
+  - id: paxful_2025
+    matter: "Paxful, Inc. — FinCEN consent order"
+    authority: "FinCEN"
+    action_no: "2025-08-12"
+    date: "2025-08-12"
+    governing_rule: "31 CFR 1022 (MSB registration) / 1022.320 (SAR)"
+    summary: "Willful BSA violations: failure to register as an MSB, ineffective AML program, failure to file SARs."
+    control: sar_disposition
+    vague_rationale: "no further action warranted per policy"
+    url: "https://www.fincen.gov/news/news-releases/fincen-assesses-35-million-penalty-against-paxful-facilitating-suspicious"
+
+reg_e_cfpb:
+  - id: cash_app_block_2025
+    matter: "Block, Inc. (Cash App) — CFPB order"
+    authority: "CFPB"
+    action_no: "2025"
+    date: "2025-01-16"
+    governing_rule: "EFTA / Reg E (12 CFR 1005.11) error resolution"
+    summary: "Failures handling fraud and Reg E unauthorized-transfer / error-resolution on the Cash App P2P platform."
+    control: reg_e
+    notice_iso: "2026-01-01T00:00:00+00:00"
+    completion_iso: "2026-02-05T00:00:00+00:00"  # >10 business days, no provisional credit
+    provisional_credit: false
+    expect_compliant: false
+    url: "https://www.consumerfinance.gov/about-us/newsroom/cfpb-orders-operator-of-cash-app-to-pay-175-million-and-fix-its-failures-on-fraud/"
+    notes: "PARTIAL: pull consent-order number from the CFPB enforcement index before final external cite."
+  - id: ews_zelle_2024
+    matter: "CFPB v. Early Warning Services / BofA / Chase / Wells (Zelle)"
+    authority: "CFPB (D. Ariz.)"
+    action_no: "2:24-cv-03652"
+    date: "2024-12-20"
+    governing_rule: "EFTA / Reg E error resolution + unauthorized transfers"
+    summary: "Alleged failure to comply with EFTA/Reg E error-resolution and unauthorized-transfer requirements on Zelle. DISMISSED with prejudice 2025-03-05 — allegation/matter-of-record only, not adjudicated."
+    control: reg_e
+    notice_iso: "2026-01-01T00:00:00+00:00"
+    completion_iso: "2026-01-30T00:00:00+00:00"
+    provisional_credit: false
+    expect_compliant: false
+    url: "https://www.consumerfinance.gov/enforcement/actions/early-warning-services-llc-bank-of-america-na-jpmorgan-chase-bank-na-wells-fargo-bank-na/"
+
+instant_rail_finality:
+  - id: ofac_instant_payment_guidance
+    matter: "OFAC Sanctions Compliance Guidance for Instant Payment Systems"
+    authority: "U.S. Treasury OFAC"
+    action_no: "guidance"
+    date: "2022-09-30"
+    governing_rule: "FedNow Reg J 12 CFR 210 Subpart C / RTP Operating Rules (irrevocability)"
+    summary: "Regulator guidance: instant-payment finality means screening must act before settlement; a post-hoc control cannot unwind an irrevocable credit."
+    control: irreversibility
+    rail_id: fednow
+    url: "https://ofac.treasury.gov/system/files/126/instant_payment_systems_compliance_guidance_brochure.pdf"
+
+baas_failures:
+  - id: synapse_evolve_2024
+    matter: "In re Synapse Financial Technologies (Ch. 11) / Evolve Bank & Trust (Fed C&D)"
+    authority: "Bankr. C.D. Cal. / Federal Reserve"
+    action_no: "Fed enforcement 2024-06-14"
+    date: "2024-06-14"
+    governing_rule: "Interagency Guidance on Third-Party Relationships (June 2023); FBO reconciliation"
+    summary: "Ledger/reconciliation ambiguity between middleware and partner banks froze end-user funds; Fed cited third-party/AML/OFAC oversight deficiencies at the partner bank."
+    control: sponsor_bank
+    ledger_owner: unclear
+    url: "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20240614a.htm"
+    notes: "PARTIAL: Synapse bankruptcy docket not pinned; Evolve Fed order is the primary source used here."
+
+money_transmitter:
+  - id: coinbase_nydfs_2023
+    matter: "Coinbase, Inc. — NYDFS consent order"
+    authority: "NYDFS"
+    action_no: "2023-01-04"
+    date: "2023-01-04"
+    governing_rule: "NY Banking Law / DFS VC + transaction-monitoring regs"
+    summary: "Transaction-monitoring backlog of 100,000+ unreviewed alerts; untimely SAR filing."
+    control: sar_disposition
+    vague_rationale: "see attached; as discussed"
+    url: "https://www.dfs.ny.gov/reports_and_publications/press_releases/pr202301041"
