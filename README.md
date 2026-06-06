@@ -6,9 +6,9 @@
 > No public remote, release tag, or DOI exists until owner sign-off (see
 > `docs/DOI_PLAN.md`). Test/coverage figures below describe this local build.
 
-Reference IP for adoption — tested patterns a payments program can build on, not
-a control operating in production. Zero runtime dependencies (stdlib only),
-typed, MIT-licensed.
+Reference IP for adoption — tested patterns a payments program can
+build on, not a control operating in production. Zero runtime
+dependencies (stdlib only), typed, MIT-licensed.
 
 This library carries the five Autonomy-Ladder governance primitives built to a
 corrected specification, plus payments-specific controls: a real OFAC sanctions
@@ -92,9 +92,14 @@ from payments_agent_audit.governance.autonomy_ladder import (
 chain = AuditChain(deployer_id="acme-pay-prod")
 gate = AutonomyLadderGate(audit_chain=chain, mode="production")
 
-# `lower_gate_attestations`: the four lower-gate criteria, each independently
-# attested (second-line MRM / third-line audit). For the concrete form, see the
-# AL-PROBE-06 "attested pre-auth unblocks" test under tests/adversarial/.
+# The four lower-gate criteria, each independently attested (2nd-line MRM /
+# 3rd-line audit) — so the irreversibility gate is the SOLE cause of refusal:
+lower_gate_attestations = tuple(
+    Attestation(c, satisfied=True, attested_by="mrm-lead", attester_role="second_line_mrm",
+                attested_at="2026-06-05T00:00:00+00:00", evidence_ref=f"evidence://{c}")
+    for c in ("sovereign_veto_load_tested", "audit_ledger_min_window",
+              "shadow_mode_min_window", "circuit_breaker_recent")
+)
 
 # A FedNow instant-payout bot whose ONLY control is a post-hoc veto.
 request = PromotionRequest(
@@ -110,9 +115,7 @@ request = PromotionRequest(
 decision = gate.evaluate(request)
 assert decision.granted is False                 # REFUSED
 assert decision.irreversibility_refusal is True  # ...on irreversibility grounds
-# With the lower gates fully attested, the post-hoc-only control on an
-# irreversible rail is the operative cause; the refusal is recorded to the
-# ledger as IRREVERSIBLE_PROMOTION_REFUSED.
+# The refusal is recorded to the ledger as IRREVERSIBLE_PROMOTION_REFUSED.
 ```
 
 Add a genuine **pre-authorization** control (pre-auth OFAC screening, a pre-send
@@ -134,7 +137,7 @@ result = screener.screen("Vladimir Smirnoff")     # fuzzy / word-order aware
 if result.is_held:                                # strict liability: do not proceed
     # An agent CANNOT clear its own hit. A human dispositions it:
     screener.disposition(result, Disposition.FALSE_POSITIVE,
-                         operator_id="analyst-jane", reason="DOB mismatch; different person")
+                         operator_id="analyst-jane", reason="DOB mismatch")
 ```
 
 ## Install & test
@@ -174,9 +177,11 @@ See `docs/` for the full assurance map.
 
 Anchors are sourced to primary materials and staged for the canonical regulatory
 list (see `docs/research/`). Confirm any statute/CFR citation against the cited
-primary source before relying on it. **This is reference IP, not legal advice** —
-sanctions screening calibration, SAR disposition, and Reg E adjudication are the
-deploying institution's compliance function's responsibility.
+primary source before relying on it; two anchors carry open items pending counsel
+(the exact RTP irrevocability section and the Nacha reversal-window rule number) —
+see `LIMITATIONS.md`. **This is reference IP, not legal advice** — sanctions
+screening calibration, SAR disposition, and Reg E adjudication are the deploying
+institution's compliance function's responsibility.
 
 ## License
 
