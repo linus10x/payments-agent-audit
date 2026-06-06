@@ -12,7 +12,6 @@ authors:
     affiliation: North Texas Capital Investments
     website: "https://www.linkedin.com/in/kunjarbhaduri"
 
-# NOT-YET-LIVE: the remote below is created at owner sign-off (see docs/DOI_PLAN.md).
 repository-code: "https://github.com/linus10x/payments-agent-audit"
 url: "https://github.com/linus10x/payments-agent-audit"
 abstract: >-
@@ -52,7 +51,7 @@ keywords:
   - human-in-the-loop
 license: MIT
 version: "0.1.0"
-
-# date-released: set at Release / Zenodo-webhook time (this build is STAGED, not released).
-# DOI: minted via the GitHub–Zenodo webhook on first Release publish.
-#   See docs/DOI_PLAN.md. Update both fields with the release date + concept DOI post-Release.
+date-released: "2026-06-06"
+# DOI: minted via the GitHub–Zenodo webhook on Release publish (pending the Zenodo
+#   GitHub-integration toggle). See docs/DOI_PLAN.md; add the `doi:` concept DOI here
+#   once Zenodo archives the v0.1.0 release.

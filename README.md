@@ -2,9 +2,10 @@
 
 **Governance patterns for autonomous AI agents in regulated payments.**
 
-> **STAGED — pre-publication.** Built and verified locally; not yet published.
-> No public remote, release tag, or DOI exists until owner sign-off (see
-> `docs/DOI_PLAN.md`). Test/coverage figures below describe this local build.
+> **Published v0.1.0** (initial public release). The Zenodo DOI mints via the
+> GitHub–Zenodo webhook on release; until that toggle is enabled the `CITATION.cff`
+> `doi:` field is intentionally absent (see `docs/DOI_PLAN.md`). Test/coverage
+> figures below describe this build.
 
 Reference IP for adoption — tested patterns a payments program can
 build on, not a control operating in production. Zero runtime

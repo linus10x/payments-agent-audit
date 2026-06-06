@@ -4,11 +4,11 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] — 2026-06-05
+## [0.1.0] — 2026-06-06
 
-Initial build. Reference governance patterns for autonomous AI agents in
-regulated payments. **Staged, not yet published** (owner gate: no remote / tag /
-DOI without sign-off).
+Initial public release. Reference governance patterns for autonomous AI agents in
+regulated payments. Public remote + `v0.1.0` tag + GitHub Release are live; the
+Zenodo DOI is pending the GitHub–Zenodo integration toggle.
 
 ### Added — five corrected primitives
 

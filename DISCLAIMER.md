@@ -1,6 +1,6 @@
 # Disclaimer
 
-**Status:** v0.1.0 · 2026-06-05 (STAGED — pre-publication).
+**Status:** v0.1.0 · published 2026-06-06.
 
 These patterns are **software, not legal advice.** They are reference governance
 patterns for autonomous AI agents in regulated payments, provided for adoption and

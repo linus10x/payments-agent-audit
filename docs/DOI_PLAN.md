@@ -5,20 +5,22 @@ artifact, mirroring the `finserv-agent-audit` and `cre-agent-audit` anchors. A D
 anchors the Payments vertical as a published, citable library alongside the
 sibling repos.
 
-**Status: STAGED — NOT YET MINTED. Owner gate.** No GitHub remote, no tag, no
-Zenodo archive without explicit owner sign-off.
+**Status: PUBLISHED v0.1.0 (2026-06-06).** The public remote, the `v0.1.0` tag, and
+the GitHub Release are live. The Zenodo DOI is **pending the one remaining step** —
+enabling the GitHub–Zenodo integration toggle (step 2) and re-publishing the release
+so the webhook mints the DOI. Steps 5–7 below remain.
 
-## Sequence (owner-executed, after sign-off)
+## Sequence
 
-1. **Create the remote** `linus10x/payments-agent-audit` (public, MIT).
+1. **Create the remote** `linus10x/payments-agent-audit` (public, MIT). ✅ done.
 2. **Enable the GitHub–Zenodo webhook** at
    `https://zenodo.org/account/settings/github/` (logged in as the account that
-   holds the sibling DOIs) — flip the repository toggle on.
-3. **Final pre-publish gate** — confirm `pytest --cov-fail-under=90` green, the six
-   AL-PROBES green, `ruff` + `mypy --strict` clean, and the council 10/10 record on
-   the public prose (README / CITATION / docs).
-4. **Tag `v0.1.0`** and publish a GitHub Release. The webhook mints a
-   version-specific DOI and a concept DOI.
+   holds the sibling DOIs) — flip the repository toggle on. ⏳ pending.
+3. **Pre-publish gate** — `pytest --cov-fail-under=90` green, the six AL-PROBES
+   green, `ruff` + `mypy --strict` clean, and the council 10/10 record on the
+   public prose (README / CITATION / docs). ✅ done.
+4. **Tag `v0.1.0`** and publish a GitHub Release. ✅ done (re-publish after step 2
+   so the webhook mints the version-specific + concept DOI).
 5. **Backfill DOIs** — write the concept DOI into `CITATION.cff` (`doi:` field) and
    the README badge, then commit as `v0.1.1` (docs-only).
 6. **Regulatory-anchor merge** — merge the staged payment reg anchors into the
