@@ -58,30 +58,30 @@ fincen_bsa_aml:
     action_no: "2024-02"
     date: "2024-10-10"
     governing_rule: "31 U.S.C. 5318 / 31 CFR 1020.320 (SAR program)"
-    summary: "Willful failure to file SARs on ~$1.5B of suspicious transactions; failure to maintain a compliant AML program."
+    summary: "Per the FinCEN consent order, willful failure to file SARs on ~$1.5B of suspicious transactions and to maintain a compliant AML program."
     control: sar_timeliness
     detection_iso: "2026-01-01T00:00:00+00:00"
     proposed_filing_iso: "2026-03-15T00:00:00+00:00"  # ~73 days — well past the 30-day deadline
     suspect_identified: true
     expect_meets_deadline: false
     url: "https://www.fincen.gov/news/news-releases/fincen-assesses-record-13-billion-penalty-against-td-bank"
-  - id: usaa_fsb_2023
+  - id: usaa_fsb_2022
     matter: "USAA Federal Savings Bank — FinCEN consent order"
     authority: "FinCEN"
-    action_no: "2023-04-05"
-    date: "2023-04-05"
+    action_no: "2022-01"
+    date: "2022-03-17"
     governing_rule: "31 CFR 1020.320 (SAR program / alert disposition)"
-    summary: "Insufficient staffing to review alerts/investigate cases; failure to file SARs."
+    summary: "Per the FinCEN consent order, insufficient staffing to review alerts/investigate cases and failure to timely file SARs."
     control: sar_disposition
     vague_rationale: "alert closed — score below threshold, no further action"
-    url: "https://www.fincen.gov/system/files?file=enforcement_action/2023-04-05/USAA_Consent_Order_Final_508_2.pdf"
+    url: "https://www.fincen.gov/news/enforcement-actions/matter-usaa-federal-savings-bank"
   - id: paxful_2025
     matter: "Paxful, Inc. — FinCEN consent order"
     authority: "FinCEN"
     action_no: "2025-08-12"
     date: "2025-08-12"
     governing_rule: "31 CFR 1022 (MSB registration) / 1022.320 (SAR)"
-    summary: "Willful BSA violations: failure to register as an MSB, ineffective AML program, failure to file SARs."
+    summary: "Per the FinCEN consent order, willful BSA violations: failure to register as an MSB, an ineffective AML program, and failure to file SARs."
     control: sar_disposition
     vague_rationale: "no further action warranted per policy"
     url: "https://www.fincen.gov/news/news-releases/fincen-assesses-35-million-penalty-against-paxful-facilitating-suspicious"
@@ -101,19 +101,6 @@ reg_e_cfpb:
     expect_compliant: false
     url: "https://www.consumerfinance.gov/about-us/newsroom/cfpb-orders-operator-of-cash-app-to-pay-175-million-and-fix-its-failures-on-fraud/"
     notes: "PARTIAL: pull consent-order number from the CFPB enforcement index before final external cite."
-  - id: ews_zelle_2024
-    matter: "CFPB v. Early Warning Services / BofA / Chase / Wells (Zelle)"
-    authority: "CFPB (D. Ariz.)"
-    action_no: "2:24-cv-03652"
-    date: "2024-12-20"
-    governing_rule: "EFTA / Reg E error resolution + unauthorized transfers"
-    summary: "Alleged failure to comply with EFTA/Reg E error-resolution and unauthorized-transfer requirements on Zelle. DISMISSED with prejudice 2025-03-05 — allegation/matter-of-record only, not adjudicated."
-    control: reg_e
-    notice_iso: "2026-01-01T00:00:00+00:00"
-    completion_iso: "2026-01-30T00:00:00+00:00"
-    provisional_credit: false
-    expect_compliant: false
-    url: "https://www.consumerfinance.gov/enforcement/actions/early-warning-services-llc-bank-of-america-na-jpmorgan-chase-bank-na-wells-fargo-bank-na/"
 
 instant_rail_finality:
   - id: ofac_instant_payment_guidance

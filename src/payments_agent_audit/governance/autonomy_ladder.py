@@ -9,9 +9,9 @@ finserv gate trusted a record of raw ``bool`` flags (anyone could pass
 records that name WHO attested, their independence ROLE, WHEN, and an
 evidence reference. In production mode an attestation from a *first-line-only*
 role is insufficient — promotion evidence must be attested by an independent
-second-line (MRM) or third-line (internal audit) function, mirroring SR 11-7
-three-lines-of-defense. An advisory-mode gate still accepts bare booleans but
-is **labeled advisory** in code and docs.
+second-line (MRM) or third-line (internal audit) function, mirroring the
+three-lines-of-defense model. An advisory-mode gate still accepts bare booleans
+but is **labeled advisory** in code and docs.
 
 **AL-PROBE-06 — irreversibility gate.** A program that moves money on an
 irreversible-by-rule rail (FedNow/RTP credit; ``rail_finality.is_irreversible``)
@@ -24,7 +24,7 @@ recorded to the audit chain as ``IRREVERSIBLE_PROMOTION_REFUSED``. ACH and
 other rails with a return/reversal window are NOT subject to this rule.
 
 Regulatory anchors: EU AI Act Art. 14 (human oversight), NIST AI RMF (Govern),
-SR 11-7 / OCC three-lines-of-defense.
+and the three-lines-of-defense model in U.S. model-risk-management guidance.
 """
 
 from __future__ import annotations

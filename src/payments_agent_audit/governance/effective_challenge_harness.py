@@ -1,19 +1,23 @@
-"""EffectiveChallengeHarness — SR 11-7 effective challenge (P5, corrected spec).
+"""EffectiveChallengeHarness — model-risk "effective challenge" (P5, corrected spec).
 
-SR 11-7 names "effective challenge" as a non-optional element of model risk
-management. When the primary model is a frontier API the institution does not
-control, the standard parallel-implementation challenger is unavailable. This
-harness runs a deployer-supplied challenger against the primary on a fixed
-eval set and emits a ``ChallengeReport`` second-line MRM can attach to a
-validation file.
+"Effective challenge" is a core model-risk-management principle in U.S.
+supervisory guidance — introduced by SR 11-7 / OCC Bulletin 2011-12 and carried
+forward in subsequent revisions of that guidance — requiring a credible,
+independent test of the primary model. When the primary model is a frontier API
+the institution does not control, the standard parallel-implementation
+challenger is unavailable. This harness runs a deployer-supplied challenger
+against the primary on a fixed eval set and emits a ``ChallengeReport`` a
+second-line model-risk function can attach to a validation file. (Confirm the
+current governing MRM guidance against the primary source; this library
+describes the durable principle, not a specific supervisory letter's status.)
 
 Corrections over the reference finserv primitive (AL-PROBE-05):
 
   * **(a) ENFORCE in code.** The challenger callable's identity must differ
     from the primary's. ``challenger is primary`` is rejected at construction —
     a self-challenge produces ``disagreement_rate == 0`` and a rubber-stamp
-    ``accept_primary``, which is exactly the failure SR 11-7 effective
-    challenge exists to prevent. The reference impl accepted it.
+    ``accept_primary``, which is exactly the failure effective challenge
+    exists to prevent. The reference impl accepted it.
   * **(b) RECORD as attestation.** Independence (not same owner / vendor family
     / prompt template) is an *operator-supplied claim*, not something the code
     can detect. The harness REQUIRES an ``IndependenceAttestation`` naming WHO
@@ -95,7 +99,7 @@ class ChallengeReport:
 
 
 class EffectiveChallengeHarness:
-    """SR 11-7 effective-challenge harness for frontier-API primaries."""
+    """Effective-challenge harness (model risk management) for frontier-API primaries."""
 
     def __init__(
         self,

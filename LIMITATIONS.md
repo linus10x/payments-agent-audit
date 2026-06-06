@@ -25,12 +25,15 @@ implemented reality; nothing here is overclaimed.
 - **Illustrative thresholds.** DEFCON fraud/loss bands, the screening threshold,
   and the retention floor are examples or floors. Calibrate to your rails, volumes,
   risk appetite, and the longest applicable obligation.
-- **Business-day approximations.** The Reg E gate approximates the 10 *business*-day
-  window as calendar days and does not own a banking-holiday calendar; it flags the
-  requirement, the deployer applies their calendar.
+- **Business-day approximations.** The Reg E gate approximates BOTH initial
+  investigation windows as calendar days — the 10-business-day standard window
+  (12 CFR 1005.11(c)(2)) and the 20-business-day new-account/POS/foreign-transfer
+  window (12 CFR 1005.11(c)(3)) — and does not own a banking-holiday calendar; it
+  flags the requirement, the deployer applies their calendar.
 - **Reg-anchor verification.** Some staged anchors carry open items (e.g. the exact
   RTP irrevocability section number; the Nacha rule number behind the 5-banking-day
-  reversal window). These are flagged for counsel and are not authored from memory.
+  reversal window). These are flagged for counsel and pending primary-source
+  verification.
 - **Single-host concurrency.** The chain serializes appends within a process and,
   for the JSONL store, across processes on one host via `flock`. Distributed
   multi-writer deployments need a store that provides the equivalent guarantee.

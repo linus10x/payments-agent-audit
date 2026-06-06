@@ -6,7 +6,7 @@ claim layer must match implemented reality.
 
 ## Defended (with a test that proves it)
 
-| Failure mode | Defense | Test |
+| Failure Mode | Defense | Test |
 |---|---|---|
 | Promote an agent past unmet controls | Attestation-gated promotion; production requires independent attestation | AL-PROBE-01 |
 | Agent clears its own veto | Self-clear hard-blocked, always | AL-PROBE-02 |
@@ -17,11 +17,11 @@ claim layer must match implemented reality.
 | Snap HALT→NORMAL in one call | Transition-direction guard | AL-PROBE-04 |
 | Model owner self-challenges to a clean pass | Reject `challenger is primary`; independence attestation | AL-PROBE-05 |
 | Autonomous irreversible-rail payout on post-hoc veto alone | Irreversibility promotion gate | AL-PROBE-06 |
-| Auto-clear an OFAC hit by the agent | Self-disposition forbidden; human disposition required | `test_ofac_screening` |
-| Name reordering / accents evading sanctions match | Token-sort + Jaccard + sequence-ratio fuzzy match | `test_ofac_screening` |
+| Auto-clear an OFAC hit by the agent | Self-disposition forbidden; human disposition required | `test_self_disposition_forbidden` |
+| Name reordering / accents evading sanctions match | Token-sort + Jaccard + sequence-ratio fuzzy match | `test_word_order_match` / `test_accent_and_case_normalized` |
 | Late SAR filing slipping through | 30/60-day deadline computation | golden corpus (TD Bank) |
 | Reg E extension without provisional credit | Provisional-credit requirement | golden corpus (Cash App) |
-| Sanctions-feed outage with money still moving | DEFCON forces HALT on feed outage | `test_defcon` |
+| Sanctions-feed outage with money still moving | DEFCON forces HALT on feed outage | `test_sanctions_feed_outage_forces_halt` |
 | Ambiguous BaaS ledger ownership | Sponsor-bank oversight non-attestable | golden corpus (Synapse/Evolve) |
 
 ## Not defended (out of scope — by design)

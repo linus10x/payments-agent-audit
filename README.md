@@ -39,7 +39,7 @@ This project is honest about what is code and what is a documented pattern. Publ
 claims match implemented reality.
 
 | Capability | Status | Notes |
-|---|---|---|
+|:---|:---|:---|
 | Autonomy-ladder promotion gate (A0–A4) + irreversibility refusal | **Implemented** | `autonomy_ladder.py`; tested, incl. AL-PROBE-06 |
 | Sovereign veto (fail-closed production mode, authenticated principal) | **Implemented** | `sovereign_veto.py` |
 | Hash-chain audit ledger (branched genesis seed; tamper + regeneration detection) | **Implemented** | `audit_chain.py` |
@@ -149,12 +149,12 @@ pytest tests/adversarial/ -v          # the six AL-PROBES (11 test functions)
 python3 scripts/mutation_pass.py      # surgical mutation pass over the invariants
 ```
 
-As of this build: **185 tests pass at 98.97% coverage.** Four assurance tiers back
+As of this build: **183 tests pass at 98.97% coverage.** Four assurance tiers back
 the claims, each a discrete count:
 
 - **Property tier** — a Hypothesis suite generating up to 2,300 cases per run
   (a ceiling, not a floor) across the ledger, finality, gate, veto, and OFAC invariants.
-- **Golden-corpus tier** — 11 real, primary-sourced enforcement / litigation /
+- **Golden-corpus tier** — 10 real, primary-sourced enforcement / litigation /
   incident matters as parametrized fixtures (each carries a primary-source URL).
 - **Adversarial tier** — the six AL-PROBES, 11 committed test functions under
   `tests/adversarial/`.

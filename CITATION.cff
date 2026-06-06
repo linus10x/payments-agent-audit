@@ -11,6 +11,7 @@ authors:
     given-names: Kunjar
     affiliation: North Texas Capital Investments
     website: "https://www.linkedin.com/in/kunjarbhaduri"
+
 # NOT-YET-LIVE: the remote below is created at owner sign-off (see docs/DOI_PLAN.md).
 repository-code: "https://github.com/linus10x/payments-agent-audit"
 url: "https://github.com/linus10x/payments-agent-audit"
@@ -20,8 +21,9 @@ abstract: >-
   governance primitives built to a corrected specification — autonomy-level
   classification (A0 through A4) with an irreversibility promotion gate,
   sovereign veto with a fail-closed production mode and authenticated-principal
-  binding, a hash-chain audit ledger with a branched genesis seed and witness
-  anchoring, a DEFCON-style risk-state machine with a transition-direction
+  binding, a hash-chain audit ledger with a branched genesis seed (external
+  witness anchoring is a deployer-wired interface, mandatory in production mode),
+  a DEFCON-style risk-state machine with a transition-direction
   guard, and an effective-challenge harness that rejects self-challenge and
   records an independence attestation. Adds payments-specific controls: an
   implemented OFAC sanctions screening workflow (fuzzy match + hit disposition
@@ -50,6 +52,7 @@ keywords:
   - human-in-the-loop
 license: MIT
 version: "0.1.0"
+
 # date-released: set at Release / Zenodo-webhook time (this build is STAGED, not released).
 # DOI: minted via the GitHub–Zenodo webhook on first Release publish.
 #   See docs/DOI_PLAN.md. Update both fields with the release date + concept DOI post-Release.

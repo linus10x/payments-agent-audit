@@ -14,7 +14,9 @@ ecfr.gov gated automated fetches).
    https://ofac.treasury.gov/sanctions-list-service ·
    https://www.law.cornell.edu/cfr/text/31/part-501 ·
    https://ofac.treasury.gov/civil-penalties-and-enforcement-information
-   (April 2024 law extended the IEEPA limitations period 5→10 years.)
+   (The 21st Century Peace through Strength Act, signed April 24, 2024, extended
+   the IEEPA/TWEA civil and criminal statute of limitations from 5 to 10 years —
+   50 U.S.C. 1705(d); 50 U.S.C. 4315(d).)
 2. **fednow** — FedNow finality. Regulation J, 12 CFR Part 210 Subpart C;
    Operating Circular 8. "Payment through the FedNow Service is final and
    irrevocable when made." https://www.law.cornell.edu/cfr/text/12/part-210/subpart-C ·
@@ -56,11 +58,8 @@ ecfr.gov gated automated fetches).
   Paxful $3.5M (2025-08-12, MSB-registration + SAR failures)
   https://www.fincen.gov/news/news-releases/fincen-assesses-35-million-penalty-against-paxful-facilitating-suspicious ·
   USAA FSB $80M (2023-04) https://www.fincen.gov/system/files?file=enforcement_action/2023-04-05/USAA_Consent_Order_Final_508_2.pdf
-- **Reg E / EFTA (CFPB):** CFPB v. Early Warning Services / BofA / Chase / Wells
-  (Zelle), D. Ariz. 2:24-cv-03652, filed 2024-12-20 — DISMISSED w/ prejudice
-  2025-03-05 (allegation/matter-of-record only, not adjudicated)
-  https://www.consumerfinance.gov/enforcement/actions/early-warning-services-llc-bank-of-america-na-jpmorgan-chase-bank-na-wells-fargo-bank-na/ ·
-  Block/Cash App $175M (2025) https://www.consumerfinance.gov/about-us/newsroom/cfpb-orders-operator-of-cash-app-to-pay-175-million-and-fix-its-failures-on-fraud/
+- **Reg E / EFTA (CFPB):** Block/Cash App $175M (2025)
+  https://www.consumerfinance.gov/about-us/newsroom/cfpb-orders-operator-of-cash-app-to-pay-175-million-and-fix-its-failures-on-fraud/
   (PARTIAL: pull consent-order number from CFPB enforcement index before final cite.)
 - **Instant-rail finality/fraud:** OFAC instant-payments guidance (above). NOTE:
   no U.S. *regulator enforcement* action found keyed specifically to FedNow/RTP

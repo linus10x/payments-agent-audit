@@ -40,10 +40,11 @@ DOI without sign-off).
 ### Added — assurance
 
 - The six AL-PROBES (AL-PROBE-01..05 + the new AL-PROBE-06) as committed adversarial
-  tests.
+  tests — 11 test functions in total (AL-PROBE-03 carries three sub-tests and
+  AL-PROBE-06 carries four; the rest are one each).
 - ~2,300 property-based cases per run; a primary-sourced golden corpus of real
   enforcement matters; a surgical mutation pass over the load-bearing invariants
   (100% kill on the targeted set).
-- 185 tests, 98.97% coverage (`--cov-fail-under=90`), ruff + mypy --strict clean.
+- 183 tests, 98.97% coverage (`--cov-fail-under=90`), ruff + mypy --strict clean.
 
 [0.1.0]: https://github.com/linus10x/payments-agent-audit/releases/tag/v0.1.0

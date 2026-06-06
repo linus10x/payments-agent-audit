@@ -69,7 +69,7 @@ class AuditEventType(Enum):
     COMPLIANCE_CHECK = "governance.compliance_check"
     PROMOTION_REFUSED = "governance.promotion_refused"  # autonomy-ladder gate refusal
 
-    # Model risk (SR 11-7 effective challenge)
+    # Model risk management (effective-challenge harness)
     MODEL_VALIDATED = "mrm.model_validated"
 
     # External anchoring (WitnessRegister)
