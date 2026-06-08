@@ -1,0 +1,27 @@
+{
+  "title": "payments-agent-audit: Governance Patterns for Autonomous AI Agents in Regulated Payments",
+  "description": "Reference governance patterns, schemas, and runnable implementations for audit-ready autonomous AI agents in regulated payments. Carries five Autonomy-Ladder governance primitives built to a corrected specification — autonomy-level classification (A0 through A4) with an irreversibility promotion gate, a fail-closed un-self-clearable sovereign veto with authenticated-principal binding, a tamper-evident hash-chain audit ledger with a branched genesis seed (external witness anchoring is a deployer-wired interface, mandatory in production mode), a DEFCON-style risk-state machine with a transition-direction guard, and an effective-challenge harness that rejects self-challenge and records an independence attestation. Adds payments-specific controls: an implemented OFAC sanctions screening workflow (fuzzy match plus hit disposition against a pluggable list, no list bundled), BSA/AML SAR timeliness and the Travel Rule, Regulation E error resolution, sponsor-bank / BaaS oversight, and a first-class rail-finality / irreversibility dimension that gates autonomy-level promotion for instant-rail (FedNow/RTP) programs while modeling ACH as non-final. Maps to U.S. payments authorities including OFAC (31 CFR Part 501 / IEEPA), FinCEN BSA/AML (31 CFR 1020.320, 1010.410(f), 1022), the FedNow Service (Regulation J, 12 CFR Part 210 Subpart C), the RTP Operating Rules, the Nacha Operating Rules, Regulation E (12 CFR 1005.11), the June 2023 Interagency Guidance on Third-Party Relationships, and the BSA five-year retention floor (31 CFR 1010.430). Reference IP for adoption, not a control operating in production; not legal or compliance advice.",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "MIT",
+  "version": "v0.1.1",
+  "creators": [
+    {
+      "name": "Bhaduri, Kunjar",
+      "affiliation": "North Texas Capital Investments"
+    }
+  ],
+  "keywords": [
+    "AI governance",
+    "autonomous agents",
+    "payments",
+    "OFAC",
+    "sanctions screening",
+    "BSA/AML",
+    "real-time payments",
+    "rail finality",
+    "audit trail",
+    "human-in-the-loop",
+    "compliance"
+  ]
+}

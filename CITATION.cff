@@ -50,8 +50,8 @@ keywords:
   - audit trail
   - human-in-the-loop
 license: MIT
-version: "0.1.0"
-date-released: "2026-06-06"
-# DOI: minted via the GitHub–Zenodo webhook on Release publish (pending the Zenodo
-#   GitHub-integration toggle). See docs/DOI_PLAN.md; add the `doi:` concept DOI here
-#   once Zenodo archives the v0.1.0 release.
+version: "0.1.1"
+date-released: "2026-06-08"
+# DOI: minted via the GitHub–Zenodo webhook on the v0.1.1 archival release.
+#   The Zenodo GitHub-integration toggle is enabled; the `doi:` concept DOI is
+#   backfilled below once Zenodo archives this release. See docs/DOI_PLAN.md.
