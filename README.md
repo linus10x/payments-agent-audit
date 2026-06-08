@@ -2,10 +2,11 @@
 
 **Governance patterns for autonomous AI agents in regulated payments.**
 
-> **Published v0.1.0** (initial public release). The Zenodo DOI mints via the
-> GitHub–Zenodo webhook on release; until that toggle is enabled the `CITATION.cff`
-> `doi:` field is intentionally absent (see `docs/DOI_PLAN.md`). Test/coverage
-> figures below describe this build.
+[![DOI](https://zenodo.org/badge/1260897052.svg)](https://doi.org/10.5281/zenodo.20592773)
+
+> **Published and archived (v0.1.1).** Archived on Zenodo — concept DOI
+> [`10.5281/zenodo.20592773`](https://doi.org/10.5281/zenodo.20592773), which always
+> resolves to the latest version. Test/coverage figures below describe this build.
 
 Reference IP for adoption — tested patterns a payments program can
 build on, not a control operating in production. Zero runtime

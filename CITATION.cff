@@ -52,6 +52,4 @@ keywords:
 license: MIT
 version: "0.1.1"
 date-released: "2026-06-08"
-# DOI: minted via the GitHub–Zenodo webhook on the v0.1.1 archival release.
-#   The Zenodo GitHub-integration toggle is enabled; the `doi:` concept DOI is
-#   backfilled below once Zenodo archives this release. See docs/DOI_PLAN.md.
+doi: "10.5281/zenodo.20592773"  # concept DOI (resolves to the latest version)

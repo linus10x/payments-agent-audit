@@ -5,10 +5,12 @@ artifact, mirroring the `finserv-agent-audit` and `cre-agent-audit` anchors. A D
 anchors the Payments vertical as a published, citable library alongside the
 sibling repos.
 
-**Status: PUBLISHED v0.1.0 (2026-06-06).** The public remote, the `v0.1.0` tag, and
-the GitHub Release are live. The Zenodo DOI is **pending the one remaining step** —
-enabling the GitHub–Zenodo integration toggle (step 2) and re-publishing the release
-so the webhook mints the DOI. Steps 5–7 below remain.
+**Status: PUBLISHED + DOI-ARCHIVED (v0.1.1, 2026-06-08).** The public remote, the
+`v0.1.1` archival release, and the Zenodo deposit are live. The GitHub–Zenodo toggle
+is enabled and the webhook minted the DOIs: **concept DOI `10.5281/zenodo.20592773`**
+(resolves to the latest version) and version DOI `10.5281/zenodo.20592774` for v0.1.1.
+Steps 1–5 are complete; steps 6–7 are maintainer-side reconciliation, not part of this
+repository.
 
 ## Sequence
 
