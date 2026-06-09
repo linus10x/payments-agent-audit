@@ -4,6 +4,25 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] — 2026-06-09
+
+### Added
+
+- **Zenodo archival.** The release is archived on Zenodo — concept DOI
+  [`10.5281/zenodo.20592773`](https://doi.org/10.5281/zenodo.20592773), which always
+  resolves to the latest version.
+- **`examples/`** — two runnable walkthroughs (an AL-PROBE-06 instant-rail
+  promotion refusal, and an OFAC screen → human disposition flow), referenced
+  from the README quickstart. The `examples/*` ruff config now governs real code.
+
+### Changed
+
+- **README pass** — added a buyer-first hook, a 30-second quickstart, a full
+  badge row (CI · coverage · tests · license · Python · DOI), a one-line proof
+  strip, and the six-library Autonomy Ladder™ family block.
+- **`pyproject.toml`** version `0.1.0` → `0.1.1` (all other surfaces already
+  read 0.1.1).
+
 ## [0.1.0] — 2026-06-06
 
 Initial public release. Reference governance patterns for autonomous AI agents in
@@ -47,4 +66,5 @@ Zenodo DOI is pending the GitHub–Zenodo integration toggle.
   (100% kill on the targeted set).
 - 183 tests, 98.97% coverage (`--cov-fail-under=90`), ruff + mypy --strict clean.
 
+[0.1.1]: https://github.com/linus10x/payments-agent-audit/releases/tag/v0.1.1
 [0.1.0]: https://github.com/linus10x/payments-agent-audit/releases/tag/v0.1.0

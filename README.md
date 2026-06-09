@@ -2,15 +2,25 @@
 
 **Governance patterns for autonomous AI agents in regulated payments.**
 
+[![CI](https://github.com/linus10x/payments-agent-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/linus10x/payments-agent-audit/actions/workflows/ci.yml)
+[![coverage](https://img.shields.io/badge/coverage-98.97%25-brightgreen)](#install--test)
+[![tests](https://img.shields.io/badge/tests-183%20passing-brightgreen)](#install--test)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE-MIT)
+[![Python](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue)](pyproject.toml)
 [![DOI](https://zenodo.org/badge/1260897052.svg)](https://doi.org/10.5281/zenodo.20592773)
+
+> **183 tests · 98.97% coverage · 11 AL-PROBES (incl. rail-finality AL-PROBE-06) · 23-mutant author audit (run manually) · 10 primary-sourced OFAC/BSA/Reg-E matters · zero deps.**
+
+If your AI agent can move money on an instant rail, a control that fires *after*
+authorization governs nothing — the money is already gone. This library makes
+**finality a first-class input** and refuses to promote an irreversible-write
+program to high autonomy on a post-hoc veto alone. Reference IP for adoption —
+tested patterns a payments program can build on, not a control operating in
+production. Zero runtime dependencies (stdlib only), typed, MIT-licensed.
 
 > **Published and archived (v0.1.1).** Archived on Zenodo — concept DOI
 > [`10.5281/zenodo.20592773`](https://doi.org/10.5281/zenodo.20592773), which always
-> resolves to the latest version. Test/coverage figures below describe this build.
-
-Reference IP for adoption — tested patterns a payments program can
-build on, not a control operating in production. Zero runtime
-dependencies (stdlib only), typed, MIT-licensed.
+> resolves to the latest version. Test/coverage figures above describe this build.
 
 This library carries the five Autonomy-Ladder governance primitives built to a
 corrected specification, plus payments-specific controls: a real OFAC sanctions
@@ -18,6 +28,46 @@ screening workflow, BSA/AML SAR timeliness and the Travel Rule, Regulation E
 error resolution, sponsor-bank / BaaS oversight, and a **first-class rail-finality
 / irreversibility dimension** that gates how far an instant-payment program may be
 trusted to act autonomously.
+
+## Part of the Autonomy Ladder™ family
+
+Six co-equal regulated-vertical reference libraries implementing the **Autonomy
+Ladder** — a governance framework for autonomous AI in regulated operations
+(A0→A4, every rung demotable). **Framework + whitepaper:
+[autonomy-ladder.io](https://autonomy-ladder.io).**
+
+| Vertical | Library |
+|---|---|
+| Cross-vertical financial services | [`finserv-agent-audit`](https://github.com/linus10x/finserv-agent-audit) |
+| Banking (model risk · ECOA/Reg B · BSA/AML/OFAC) | [`banking-agent-audit`](https://github.com/linus10x/banking-agent-audit) |
+| Payments (OFAC · Reg E · rail finality) | **[`payments-agent-audit`](https://github.com/linus10x/payments-agent-audit)** |
+| Health-insurance payer (UM · prior auth · appeals) | [`payer-agent-audit`](https://github.com/linus10x/payer-agent-audit) |
+| SEC-registered investment advisers (Advisers Act §206) | [`private-capital-agent-audit`](https://github.com/linus10x/private-capital-agent-audit) |
+| Commercial real estate | [`cre-agent-audit`](https://github.com/linus10x/cre-agent-audit) |
+
+## 30-second quickstart
+
+```bash
+pip install -e ".[dev,test-property]"
+PYTHONPATH=src python3 examples/instant_rail_promotion_refusal.py
+```
+
+```
+=== Post-hoc-veto-only on FedNow ===
+granted                = False
+irreversibility_refusal = True
+  - IRREVERSIBILITY REFUSAL: program 'fednow-payout-bot' moves money on FedNow
+    Service (instant credit) (final-by-rule), and its only controls act after
+    authorization (['post_hoc_veto']). ...
+```
+
+A FedNow instant-payout bot is **refused** A3 promotion — not because autonomy
+is forbidden, but because its only control acts *after* an irreversible credit
+settles. Add a pre-authorization control and the same program is promotable.
+Two runnable walkthroughs ship under [`examples/`](examples/):
+[`instant_rail_promotion_refusal.py`](examples/instant_rail_promotion_refusal.py)
+(AL-PROBE-06) and [`ofac_screen_and_disposition.py`](examples/ofac_screen_and_disposition.py)
+(OFAC screen → human disposition).
 
 ---
 
@@ -147,12 +197,17 @@ if result.is_held:                                # strict liability: do not pro
 ```bash
 pip install -e ".[dev,test-property]"
 pytest tests/ --cov=src/payments_agent_audit --cov-fail-under=90
-pytest tests/adversarial/ -v          # the six AL-PROBES (11 test functions)
-python3 scripts/mutation_pass.py      # surgical mutation pass over the invariants
+pytest tests/adversarial/ -v               # the six AL-PROBES (11 test functions)
+PYTHONPATH=src python3 scripts/mutation_pass.py   # surgical mutation pass (manual)
+
+# Runnable examples:
+PYTHONPATH=src python3 examples/instant_rail_promotion_refusal.py
+PYTHONPATH=src python3 examples/ofac_screen_and_disposition.py
 ```
 
-As of this build: **183 tests pass at 98.97% coverage.** Four assurance tiers back
-the claims, each a discrete count:
+As of this build: **183 tests pass at 98.97% coverage.** CI (`ci.yml`) runs the
+test + coverage gate, the AL-PROBES, ruff, and `mypy --strict` on Python 3.12 and
+3.13. Four assurance tiers back the claims, each a discrete count:
 
 - **Property tier** — a Hypothesis suite generating up to 2,300 cases per run
   (a ceiling, not a floor) across the ledger, finality, gate, veto, and OFAC invariants.
@@ -161,7 +216,8 @@ the claims, each a discrete count:
 - **Adversarial tier** — the six AL-PROBES, 11 committed test functions under
   `tests/adversarial/`.
 - **Mutation tier** — a surgical pass that kills all 23 targeted mutants of the
-  load-bearing invariants.
+  load-bearing invariants. It is an **author audit run manually**
+  (`scripts/mutation_pass.py`), not wired into CI.
 
 See `docs/` for the full assurance map.
 
