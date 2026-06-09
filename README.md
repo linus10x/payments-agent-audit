@@ -1,33 +1,41 @@
 # payments-agent-audit
 
-**Governance patterns for autonomous AI agents in regulated payments.**
+**A runnable governance library for autonomous AI agents in regulated payments — where rail finality, OFAC strict liability, and Reg E meet AI deployment authority.**
 
 [![CI](https://github.com/linus10x/payments-agent-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/linus10x/payments-agent-audit/actions/workflows/ci.yml)
-[![coverage](https://img.shields.io/badge/coverage-98.97%25-brightgreen)](#install--test)
-[![tests](https://img.shields.io/badge/tests-183%20passing-brightgreen)](#install--test)
+[![coverage](https://img.shields.io/badge/coverage-98.97%25-brightgreen)](#install)
+[![tests](https://img.shields.io/badge/tests-183%20passing-brightgreen)](#install)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE-MIT)
 [![Python](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue)](pyproject.toml)
 [![DOI](https://zenodo.org/badge/1260897052.svg)](https://doi.org/10.5281/zenodo.20592773)
+[![Autonomy Ladder family](https://img.shields.io/badge/Autonomy%20Ladder-family%20(6%20libraries)-1b2a4a)](https://github.com/linus10x/autonomy-ladder-libraries)
 
-> **183 tests · 98.97% coverage · 11 AL-PROBES (incl. rail-finality AL-PROBE-06) · 23-mutant author audit (run manually) · 10 primary-sourced OFAC/BSA/Reg-E matters · zero deps.**
+> **What this is:** a reference library that encodes the [Autonomy Ladder](https://autonomy-ladder.io) (A0→A4) for autonomous payments agents — finality as a first-class input, a non-overridable sovereign veto, a hash-chain audit ledger, and a real OFAC screening control — as runnable, tested Python. If an agent can move money on an instant rail, a control that fires *after* authorization governs nothing; the money is already gone.
+> **What this is not:** a deployed production control, a sanctions-list feed, or legal advice. It ships no SDN data and runs in no institution's payment flow.
+> **Who this is for:** a payments / fintech compliance or risk lead deciding how far to trust an AI agent on FedNow / RTP / ACH / card rails — or a lab or cloud-provider FSI applied lead who needs a concrete, falsifiable model of deployment-authority governance under strict-liability regimes.
 
-If your AI agent can move money on an instant rail, a control that fires *after*
-authorization governs nothing — the money is already gone. This library makes
-**finality a first-class input** and refuses to promote an irreversible-write
-program to high autonomy on a post-hoc veto alone. Reference IP for adoption —
-tested patterns a payments program can build on, not a control operating in
-production. Zero runtime dependencies (stdlib only), typed, MIT-licensed.
+## 30-second tour
 
-> **Published and archived (v0.1.1).** Archived on Zenodo — concept DOI
-> [`10.5281/zenodo.20592773`](https://doi.org/10.5281/zenodo.20592773), which always
-> resolves to the latest version. Test/coverage figures above describe this build.
+- **Verticals:** payments (part of the six-library [Autonomy Ladder family](https://github.com/linus10x/autonomy-ladder-libraries)).
+- **Decision classes:** the **rail-finality / irreversibility gate** (AL-PROBE-06) and **OFAC screen → human disposition** — both real, tested controls.
+- **Regulators / rules encoded:** OFAC sanctions (strict liability), Regulation E error resolution (12 CFR 1005.11), BSA/AML SAR timeliness + Travel Rule, and rail finality (FedNow Reg J 12 CFR 210 Subpart C · RTP irrevocability · Nacha return windows).
+- **Assurance:** **183 tests · 98.97% coverage** · 11 AL-PROBE functions · a 23-mutant author audit (run manually) · zero runtime dependencies, typed, MIT.
+- **Golden corpus — 10 real, primary-sourced matters of record:** Tango Card (OFAC 2022) · MoneyGram (OFAC 2021) · CoinList (OFAC 2023) · TD Bank (FinCEN 2024) · USAA FSB (FinCEN 2022) · Paxful (FinCEN 2025) · Block/Cash App (CFPB 2025) · OFAC Instant-Payment guidance (2022) · Synapse/Evolve (Bankr. + Fed 2024) · Coinbase (NYDFS 2023).
 
-This library carries the five Autonomy-Ladder governance primitives built to a
-corrected specification, plus payments-specific controls: a real OFAC sanctions
-screening workflow, BSA/AML SAR timeliness and the Travel Rule, Regulation E
-error resolution, sponsor-bank / BaaS oversight, and a **first-class rail-finality
-/ irreversibility dimension** that gates how far an instant-payment program may be
-trusted to act autonomously.
+## Read me first
+
+1. **The test that carries the thesis** — `tests/adversarial/` (AL-PROBE-06, the irreversibility gate) and the OFAC screen test. Each rule is a runnable, falsifiable check.
+2. **[`WORKED_EXAMPLE.md`](WORKED_EXAMPLE.md)** — the full irreversible-rail decision class walked end to end: an agent attempts an autonomous instant-rail payment, the gate refuses promotion, the OFAC screen holds a near-match, and both land on the tamper-evident ledger.
+3. **[autonomy-ladder.io](https://autonomy-ladder.io)** — the framework and whitepaper behind all six libraries.
+
+## Install
+
+```bash
+pip install -e ".[dev,test-property]"
+PYTHONPATH=src python3 examples/instant_rail_promotion_refusal.py
+```
+
+---
 
 ## Why this exists for frontier autonomy stacks
 
@@ -39,28 +47,7 @@ The controls in this library are **domain-agnostic**. The DEFCON state machine, 
 > **For reviewers & safety teams:** every control here is falsifiable — the test suite (183 tests · 98.97% coverage · a real OFAC screening control) turns each rule into a runnable check, and the veto and ledger are infrastructure with operational properties (separate process boundary, distinct credentials, a gate the agent cannot reach; write-once retention). These are reference implementations for adoption, not deployed production controls.
 
 
-## Part of the Autonomy Ladder™ family
-
-Six co-equal regulated-vertical reference libraries implementing the **Autonomy
-Ladder** — a governance framework for autonomous AI in regulated operations
-(A0→A4, every rung demotable). **Framework + whitepaper:
-[autonomy-ladder.io](https://autonomy-ladder.io).**
-
-| Vertical | Library |
-|---|---|
-| Cross-vertical financial services | [`finserv-agent-audit`](https://github.com/linus10x/finserv-agent-audit) |
-| Banking (model risk · ECOA/Reg B · BSA/AML/OFAC) | [`banking-agent-audit`](https://github.com/linus10x/banking-agent-audit) |
-| Payments (OFAC · Reg E · rail finality) | **[`payments-agent-audit`](https://github.com/linus10x/payments-agent-audit)** |
-| Health-insurance payer (UM · prior auth · appeals) | [`payer-agent-audit`](https://github.com/linus10x/payer-agent-audit) |
-| SEC-registered investment advisers (Advisers Act §206) | [`private-capital-agent-audit`](https://github.com/linus10x/private-capital-agent-audit) |
-| Commercial real estate | [`cre-agent-audit`](https://github.com/linus10x/cre-agent-audit) |
-
-## 30-second quickstart
-
-```bash
-pip install -e ".[dev,test-property]"
-PYTHONPATH=src python3 examples/instant_rail_promotion_refusal.py
-```
+## The worked example, in 10 lines of output
 
 ```
 === Post-hoc-veto-only on FedNow ===
@@ -74,7 +61,8 @@ irreversibility_refusal = True
 A FedNow instant-payout bot is **refused** A3 promotion — not because autonomy
 is forbidden, but because its only control acts *after* an irreversible credit
 settles. Add a pre-authorization control and the same program is promotable.
-Two runnable walkthroughs ship under [`examples/`](examples/):
+The full walkthrough is in [`WORKED_EXAMPLE.md`](WORKED_EXAMPLE.md); two runnable
+scripts ship under [`examples/`](examples/):
 [`instant_rail_promotion_refusal.py`](examples/instant_rail_promotion_refusal.py)
 (AL-PROBE-06) and [`ofac_screen_and_disposition.py`](examples/ofac_screen_and_disposition.py)
 (OFAC screen → human disposition).
@@ -255,7 +243,33 @@ institution's compliance function's responsibility.
 
 MIT. See `LICENSE-MIT`.
 
-> Patterns extracted from a private quantitative options program; the source
+> Patterns extracted from a private quantitative program; the source
 > program operates in paper-trading Phase 0 — no live capital has been deployed.
 > Reference patterns and characterizations are summaries, not legal advice —
 > consult qualified counsel and qualified compliance practitioners.
+
+---
+
+## Part of the Autonomy Ladder™ family
+
+[![Autonomy Ladder family](https://img.shields.io/badge/Autonomy%20Ladder-family%20(6%20libraries)-1b2a4a)](https://github.com/linus10x/autonomy-ladder-libraries)
+
+Six co-equal regulated-vertical reference libraries implementing one framework —
+the **Autonomy Ladder** (A0→A4, every rung demotable). They share the same five
+governance primitives, the same MIT license, and the same evidence discipline
+(zero runtime deps · `mypy --strict` · SHA-pinned CI · golden corpora of real,
+primary-sourced enforcement actions). The decision class changes by vertical;
+the rungs and controls do not. **Start at the family landing page:
+[`autonomy-ladder-libraries`](https://github.com/linus10x/autonomy-ladder-libraries).**
+This library's primitives are mapped to A0→A4 in [`AUTONOMY_LADDER.md`](AUTONOMY_LADDER.md).
+
+| Vertical | Library | DOI |
+|---|---|---|
+| Cross-vertical financial services | [`finserv-agent-audit`](https://github.com/linus10x/finserv-agent-audit) | [10.5281/zenodo.20434570](https://doi.org/10.5281/zenodo.20434570) |
+| Banking (model risk · ECOA/Reg B · BSA/AML/OFAC) | [`banking-agent-audit`](https://github.com/linus10x/banking-agent-audit) | [10.5281/zenodo.20564584](https://doi.org/10.5281/zenodo.20564584) |
+| Payments (OFAC · Reg E · rail finality) | **[`payments-agent-audit`](https://github.com/linus10x/payments-agent-audit)** | [10.5281/zenodo.20592773](https://doi.org/10.5281/zenodo.20592773) |
+| Health-insurance payer (UM · prior auth · appeals) | [`payer-agent-audit`](https://github.com/linus10x/payer-agent-audit) | [10.5281/zenodo.20564377](https://doi.org/10.5281/zenodo.20564377) |
+| SEC-registered investment advisers (Advisers Act §206) | [`private-capital-agent-audit`](https://github.com/linus10x/private-capital-agent-audit) | [10.5281/zenodo.20564496](https://doi.org/10.5281/zenodo.20564496) |
+| Commercial real estate | [`cre-agent-audit`](https://github.com/linus10x/cre-agent-audit) | [10.5281/zenodo.20437081](https://doi.org/10.5281/zenodo.20437081) |
+
+**Framework + whitepaper:** [autonomy-ladder.io](https://autonomy-ladder.io).
