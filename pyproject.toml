@@ -11,7 +11,7 @@ include = ["payments_agent_audit*"]
 
 [project]
 name = "payments-agent-audit"
-version = "0.1.2"
+version = "0.1.3"
 description = "Governance patterns for autonomous AI agents in regulated payments"
 readme = "README.md"
 license = { text = "MIT" }
