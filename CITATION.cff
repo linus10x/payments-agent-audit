@@ -50,6 +50,6 @@ keywords:
   - audit trail
   - human-in-the-loop
 license: MIT
-version: "0.1.1"
+version: "0.1.2"
 date-released: "2026-06-08"
 doi: "10.5281/zenodo.20592773"  # concept DOI (resolves to the latest version)
