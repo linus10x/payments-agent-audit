@@ -1,0 +1,128 @@
+name: Publish to PyPI
+
+# Trusted Publishing (OIDC) + PEP 740 Sigstore-attested wheels.
+# No long-lived API tokens; per-job short-lived OIDC tokens minted by GitHub
+# and exchanged with PyPI / TestPyPI via the project-level Trusted Publisher
+# binding (see docs/PYPI_TRUSTED_PUBLISHING_SETUP.md).
+#
+# Trigger model:
+#   - push of a `v*` tag       -> build + TestPyPI + PyPI (full release)
+#   - workflow_dispatch (manual) -> build + TestPyPI only (dry-run / smoke test)
+#
+# The `pypi` environment is configured with required reviewers so the final
+# push to production PyPI cannot proceed without explicit human approval,
+# even after a tag push.
+#
+# All third-party actions are SHA-pinned (CWE-1357 supply-chain hardening,
+# per the tj-actions/changed-files 2025 incident class). Dependabot picks up
+# the trailing `# vX.Y.Z` comment for version-bump PRs.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build wheel + sdist
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4.3.1
+        with:
+          # Full history so that setuptools-scm-style version derivation, if
+          # ever adopted, has the tag graph available. Harmless for the
+          # current static-version setup.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Upgrade pip + install build
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade build
+
+      - name: Build distributions
+        run: python -m build
+
+      - name: Show built artifacts
+        run: ls -la dist/
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+
+  publish-testpypi:
+    name: Publish to TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    # Best-effort: TestPyPI requires a Trusted Publisher configured on test.pypi.org
+    # for this project. Until that owner-side config exists, a publish failure must
+    # NOT fail the release (the library is distributed via git + Zenodo, not PyPI).
+    continue-on-error: true
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/payments-agent-audit
+    permissions:
+      id-token: write       # Required for Trusted Publishing OIDC token mint
+      contents: read
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b  # v1.14.0
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          # PEP 740 attestation generation is on by default for Trusted
+          # Publishing flows; the action emits a Sigstore bundle per artifact
+          # and uploads it alongside the wheel + sdist.
+          skip-existing: true
+
+  publish-pypi:
+    name: Publish to PyPI
+    needs: publish-testpypi
+    # Manual dispatch runs stop after TestPyPI; only real tag pushes
+    # propagate to production PyPI.
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/payments-agent-audit
+    permissions:
+      id-token: write       # Trusted Publishing OIDC
+      attestations: write   # PEP 740 attestations write-back
+      contents: read
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b  # v1.14.0
+        # No `with:` block needed:
+        #   - default repository-url is https://upload.pypi.org/legacy/
+        #   - Trusted Publishing binding supplies the credential
+        #   - PEP 740 attestations generated + uploaded automatically
