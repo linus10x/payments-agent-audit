@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.4] — 2026-06-27
+
+First distribution to PyPI via Trusted Publishing (packaging/release only, no code changes).
+
 ## [0.1.3] — 2026-06-09
 
 Frontier-autonomy README section + 'for reviewers & safety teams' note; links the framework and the non-financial agent-coordination demo. No source changes.
