@@ -3,7 +3,7 @@
 Each probe reconstructs the EXACT failing construction the corrected §2 spec
 defends against, so a PASS is reproducible and reviewable (the original
 ephemeral /tmp probes are gone — these are the committed replacements). The
-five AL-PROBE-01..05 mirror the JPMC catalog's primitive probes; AL-PROBE-06
+five AL-PROBE-01..05 mirror a Tier-1-bank audit catalog's primitive probes; AL-PROBE-06
 is NEW to this library — the rail-finality / irreversibility gate.
 
 Run: ``pytest tests/adversarial/test_al_probes.py -v``
