@@ -174,7 +174,7 @@ same program is promotable. The gate blocks post-hoc-only autonomy on irreversib
 rails — not autonomy itself. **ACH is modeled non-final separately**: the
 instant-rail finality rule does not apply to it.
 
-## OFAC screening (a tested reference OFAC screening control (no list bundled))
+## OFAC screening (tested reference control, no list bundled)
 
 ```python
 from payments_agent_audit.governance.ofac_screening import OFACScreener, Disposition
