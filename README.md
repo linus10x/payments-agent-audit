@@ -39,7 +39,7 @@ PYTHONPATH=src python3 examples/instant_rail_promotion_refusal.py
 
 ## Why this exists for frontier autonomy stacks
 
-The controls in this library are **domain-agnostic**. The DEFCON state machine, the non-overridable **sovereign veto** (a separate-process control the agent cannot switch off), the **hash-chain audit ledger** (it detects tampering within its trust boundary), the **hard envelopes with mechanical escalation**, the **sampled-review tripwires**, and **monitor-led promotion** were forged in real multi-agent production systems under consequence — and they apply directly to any high-stakes coordinated autonomy (vehicles, robots, agent swarms) where *invisible promotion* or *cascade failure* is unacceptable. The decision class is a parameter: this repo encodes it for **payments — OFAC screening, Reg E, rail-finality / irreversibility**, but the same A0→A4 deployment-authority structure lifts into any decision class without inheriting financial-services assumptions.
+The controls in this library are **domain-agnostic**. The DEFCON state machine, the non-overridable **sovereign veto** (a separate-process control the agent cannot switch off), the **hash-chain audit ledger** (it detects tampering within its trust boundary), the **hard envelopes with mechanical escalation**, the **sampled-review tripwires**, and **monitor-led promotion** were developed in my own multi-agent research systems — and they apply directly to any high-stakes coordinated autonomy (vehicles, robots, agent swarms) where *invisible promotion* or *cascade failure* is unacceptable. The decision class is a parameter: this repo encodes it for **payments — OFAC screening, Reg E, rail-finality / irreversibility**, but the same A0→A4 deployment-authority structure lifts into any decision class without inheriting financial-services assumptions.
 
 - **Framework + whitepaper:** [autonomy-ladder.io](https://autonomy-ladder.io)
 - **Non-financial demo (under 60s):** [`finserv-agent-audit/examples/agent_coordination`](https://github.com/linus10x/finserv-agent-audit/tree/main/examples/agent_coordination) — the same veto / envelope / audit-chain / demotion primitives on a generic agent swarm.
@@ -174,7 +174,7 @@ same program is promotable. The gate blocks post-hoc-only autonomy on irreversib
 rails — not autonomy itself. **ACH is modeled non-final separately**: the
 instant-rail finality rule does not apply to it.
 
-## OFAC screening (a real control, not a doc)
+## OFAC screening (a tested reference OFAC screening control (no list bundled))
 
 ```python
 from payments_agent_audit.governance.ofac_screening import OFACScreener, Disposition
