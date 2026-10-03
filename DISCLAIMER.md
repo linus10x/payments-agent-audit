@@ -19,7 +19,5 @@ study.
 - The primitives are **reference IP for adoption**, not a control operating in
   production. The claim layer in this repository matches implemented reality;
   documented-but-unimplemented patterns are labeled as such.
-- Patterns were extracted from a private quantitative options program; the source
-  program operates in paper-trading Phase 0 — no live capital has been deployed.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. See `LICENSE-MIT`.
