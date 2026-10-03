@@ -243,8 +243,6 @@ institution's compliance function's responsibility.
 
 MIT. See `LICENSE-MIT`.
 
-> Patterns extracted from a private quantitative program; the source
-> program operates in paper-trading Phase 0 — no live capital has been deployed.
 > Reference patterns and characterizations are summaries, not legal advice —
 > consult qualified counsel and qualified compliance practitioners.
 
