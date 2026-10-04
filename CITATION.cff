@@ -36,8 +36,7 @@ abstract: >-
   Nacha Operating Rules, Regulation E (12 CFR 1005.11), the June 2023 Interagency
   Guidance on Third-Party Relationships, and the BSA five-year retention floor (31
   CFR 1010.430). The claim layer matches implemented reality; documented patterns
-  are labeled as such. Patterns extracted from a private quantitative options
-  program operating in paper-trading Phase 0 — no live capital deployed.
+  are labeled as such.
 keywords:
   - AI governance
   - autonomous agents
