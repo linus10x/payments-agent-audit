@@ -19,8 +19,8 @@ repository.
    `https://zenodo.org/account/settings/github/` (logged in as the account that
    holds the sibling DOIs) — flip the repository toggle on. ⏳ pending.
 3. **Pre-publish gate** — `pytest --cov-fail-under=90` green, the six AL-PROBES
-   green, `ruff` + `mypy --strict` clean, and the council 10/10 record on the
-   public prose (README / CITATION / docs). ✅ done.
+   green, `ruff` + `mypy --strict` clean, and the public prose (README /
+   CITATION / docs) checked. ✅ done.
 4. **Tag `v0.1.0`** and publish a GitHub Release. ✅ done (re-publish after step 2
    so the webhook mints the version-specific + concept DOI).
 5. **Backfill DOIs** — write the concept DOI into `CITATION.cff` (`doi:` field) and
