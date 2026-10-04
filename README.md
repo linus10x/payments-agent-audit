@@ -227,7 +227,7 @@ See `docs/` for the full assurance map.
 - `LIMITATIONS.md` — known boundaries and non-scope
 - `DISCLAIMER.md` — reference IP, not legal advice
 - `docs/research/primary_source_research_2026-06-05.md` — reg + corpus provenance
-- `CITATION.cff` — how to cite; DOI plan in `docs/DOI_PLAN.md`
+- `CITATION.cff` — how to cite
 
 ## Regulatory anchors
 
